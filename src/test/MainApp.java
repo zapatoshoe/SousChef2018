@@ -9,12 +9,7 @@ public class MainApp {
         AbstractApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
         HelloWorld objA = (HelloWorld) context.getBean("helloWorld");
         objA.setMessage("It's me fucker");
-        "I have died every day waiting for you";
         objA.getMessage();
         context.registerShutdownHook();
-    }
-
-    public static void iLoveYou() {
-        System.out.println("Hi");
     }
 }
