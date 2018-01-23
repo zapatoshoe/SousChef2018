@@ -12,4 +12,8 @@ public class MainApp {
         objA.getMessage();
         context.registerShutdownHook();
     }
+
+    public static void iLoveYou() {
+        System.out.println("Hi");
+    }
 }
