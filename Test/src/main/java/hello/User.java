@@ -1,28 +1,27 @@
 package hello;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity // This tells Hibernate to make a table out of this class
+@Entity
 public class User {
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
 
-    private String name;
-
-    private String email;
-    
-
-	public Integer getId() {
-		return id;
+	private String email;
+	
+	@Id
+	private String name;
+	
+	public User() {
+		
 	}
-
-	public void setId(Integer id) {
-		this.id = id;
+	
+	public User(String name, String email) {
+		this.name = name;
+		this.email = email;
 	}
-
+	
 	public String getName() {
 		return name;
 	}
@@ -38,6 +37,7 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
 
+	
+	
 }
