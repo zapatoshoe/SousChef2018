@@ -1,9 +1,0 @@
-package hello;
-
-import javax.persistence.Entity;
-
-@Entity
-public class User {
-	@Id
-	@GeneratedValue(GenerationType.AUTO)
-}

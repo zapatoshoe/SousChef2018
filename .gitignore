@@ -1,9 +1,6 @@
-/spring-data-commons/
-/out/
-/.recommenders/
-/.metadata/
-/.idea/
-/Test/target/
-/DatabaseTest/.settings/
-/DatabaseTest/target/
-/DatabaseTest/.project
+.metadata/
+.recommenders/
+RemoteSystemsTempFiles/
+DatabaseDummy/.mvn/
+DatabaseDummy/.settings/
+DatabaseDummy/target/

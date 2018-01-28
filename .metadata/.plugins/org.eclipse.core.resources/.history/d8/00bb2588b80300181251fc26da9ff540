@@ -1,7 +1,0 @@
-package user;
-
-
-@Service
-public class UserService {
-
-}
