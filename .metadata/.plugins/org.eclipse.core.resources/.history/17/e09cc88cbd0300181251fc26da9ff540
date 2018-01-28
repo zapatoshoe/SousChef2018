@@ -1,0 +1,12 @@
+package hello;
+
+@Service
+public class UserService {
+	
+	private List<User> = Arrays.asList(
+			new User("Ethan", "1"),
+			new User("Danny", "2")
+			);
+			
+	
+}

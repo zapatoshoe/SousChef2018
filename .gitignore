@@ -1,5 +1,9 @@
-/out
-/.idea
-TestSpring.iml
-/spring-data-commons
+/spring-data-commons/
+/out/
+/.recommenders/
 /.metadata/
+/.idea/
+/Test/target/
+/DatabaseTest/.settings/
+/DatabaseTest/target/
+/DatabaseTest/.project

@@ -1,0 +1,29 @@
+<component name="libraryTable">
+  <library name="spring-aop-5.0.2.RELEASE">
+    <CLASSES>
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-aop-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-aspects-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-beans-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-context-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-context-indexer-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-context-support-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-core-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-expression-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-instrument-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-jcl-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-jdbc-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-jms-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-messaging-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-orm-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-oxm-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-test-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-tx-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-web-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-webflux-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-webmvc-5.0.2.RELEASE.jar!/" />
+      <root url="jar://U:/spring-framework-5.0.2.RELEASE/libs/binaries/spring-websocket-5.0.2.RELEASE.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
