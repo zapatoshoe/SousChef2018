@@ -1,0 +1,5 @@
+package db.app.User;
+
+public class UserController {
+
+}
