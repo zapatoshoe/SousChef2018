@@ -1,0 +1,6 @@
+.metadata/
+.recommenders/
+RemoteSystemsTempFiles/
+DatabaseDummy/.mvn/
+DatabaseDummy/.settings/
+DatabaseDummy/target/

@@ -1,8 +1,8 @@
 ----------------------------------------------------------------
-Sun Jan 28 23:38:59 CST 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-0161-406c-f8f3-0000065472c0 
-on database directory memory:U:\COMS309\YT_1\DatabaseDummy\testdb with class loader sun.misc.Launcher$AppClassLoader@6d06d69c 
-Loaded from file:/C:/Users/ethan/.m2/repository/org/apache/derby/derby/10.13.1.1/derby-10.13.1.1.jar
+Mon Jan 29 23:13:05 CST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-0161-457b-991d-000002583ae0 
+on database directory memory:U:\COMS309\YT_1\DatabaseDummy\testdb with class loader org.springframework.boot.loader.LaunchedURLClassLoader@6b884d57 
+Loaded from jar:file:/U:/COMS309/YT_1/DatabaseDummy/target/DatabaseDummy-0.0.1-SNAPSHOT.jar!/BOOT-INF/lib/derby-10.13.1.1.jar!/
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_152-b16
 user.dir=U:\COMS309\YT_1\DatabaseDummy
