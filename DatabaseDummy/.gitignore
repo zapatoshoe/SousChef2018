@@ -1,16 +1,20 @@
 target/
-!.mvn/wrapper/maven-wrapper.jar
+RemoteSystemsTempFiles/
+.recommenders/
+.metadata/
 
 ### STS ###
 .apt_generated
 .classpath
 .factorypath
 .project
-.settings
+DatabaseDummy/.settings/
 .springBeans
+DatabaseDummy/.mvn/
+
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
