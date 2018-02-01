@@ -15,13 +15,7 @@ public class Item {
 	private String name;
 	@ManyToOne
 	private Person person;
-	
-	public Item() {}
-	public Item(String name, String personName) {
-		this.name = name;
-		this.person = new Person(personName,"");
-	}
-	
+
 	public Person getPerson() {
 		return person;
 	}

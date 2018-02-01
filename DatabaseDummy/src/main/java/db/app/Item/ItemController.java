@@ -32,13 +32,11 @@ public class ItemController {
 	
 	@RequestMapping(method=RequestMethod.POST, value="/persons/{name}/items")
 	public void addItem(@PathVariable String name, @RequestBody Item item) {
-		item.setPerson(new Person(name, ""));	//make a new person with correct name
 		itemService.addItem(item);
 	}
 	
 	@RequestMapping(method=RequestMethod.PUT, value="/persons/{name}/items/{itemId}")
 	public void updateItem(@PathVariable String name, @PathVariable String itemId, @RequestBody Item item) {
-		item.setPerson(new Person(name, ""));	//make a new person with correct name
 		itemService.updateItem(item);
 	}
 	

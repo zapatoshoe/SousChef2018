@@ -23,9 +23,10 @@ public class PersonController {
 		return personService.getAllPersons();
 	}
 	
-	@RequestMapping("/persons/{name}")
-	public Person getPerson(@PathVariable String name) {
-		return personService.getPerson(name);
+	@RequestMapping("/persons/{email}")
+	public Person getPerson(@PathVariable String email) {
+		System.out.println(email);
+		return personService.getPerson(email);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/persons")
@@ -33,14 +34,19 @@ public class PersonController {
 		personService.addPerson(person);
 	}
 	
-	@RequestMapping(method=RequestMethod.PUT, value="/persons/{name}")
-	public void updatePerson(@PathVariable String name, @RequestBody Person person) {
-		personService.updatePerson(person, name);
+	@RequestMapping(method=RequestMethod.PUT, value="/persons/{email}")
+	public void updatePerson(@PathVariable String email, @RequestBody Person person) {
+		personService.updatePerson(person, email);
 	}
 	
-	@RequestMapping(method=RequestMethod.DELETE, value="/persons/{name}")
-	public void deletePerson(@PathVariable String name) {
-		personService.deletePerson(name);
+	@RequestMapping(method=RequestMethod.DELETE, value="/persons/{email}")
+	public void deletePerson(@PathVariable String email) {
+		personService.deletePerson(email);
+	}
+	
+	@RequestMapping(method=RequestMethod.POST, value="/persons/login")	//POST to include body (Person)
+	public boolean validLogin(@RequestBody Person person) {
+		return personService.validLogin(person);
 	}
 	
 }
