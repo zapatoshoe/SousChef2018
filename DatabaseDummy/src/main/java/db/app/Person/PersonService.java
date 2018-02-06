@@ -14,6 +14,11 @@ public class PersonService {
 	@Autowired
 	private PersonRepository personRepository;
 
+	/**
+	 * 
+	 * @param email
+	 * @return
+	 */
 	public Person getPerson(String email) {
 		//get the person via email
 		try {

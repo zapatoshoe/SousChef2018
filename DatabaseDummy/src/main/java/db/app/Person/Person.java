@@ -11,12 +11,27 @@ import java.net.URLDecoder;
 @Entity
 public class Person {
 
+	/**
+	 * Unique identifier
+	 */
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
+	/**
+	 * Their Full name
+	 */
 	private String name;
+	/**
+	 * Their email address
+	 */
 	private String email;
+	/**
+	 * Their password
+	 */
 	private String password;
+	/**
+	 * Their type - Chef, Author, or Admin
+	 */
 	private String type;
 	
 	public Integer getId() {
