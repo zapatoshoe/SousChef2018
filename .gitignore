@@ -1,7 +1,5 @@
-.metadata/
-.recommenders/
-RemoteSystemsTempFiles/
-DatabaseDummy/.mvn/
-DatabaseDummy/.settings/
-DatabaseDummy/target/
-.idea/
+/.idea
+/DatabaseDummy
+/SousChefServer/SousChefServer.iml
+/SousChefServer/target
+/SousChefServer/test
