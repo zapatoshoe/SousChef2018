@@ -7,6 +7,7 @@ import javax.persistence.Id;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.sql.Blob;
 
 @Entity
 public class Person {
@@ -33,6 +34,10 @@ public class Person {
 	 * Their type - Chef, Author, or Admin
 	 */
 	private String type;
+	/**
+	 * The person's image
+	 */
+	private Blob picture;
 
 	public Person() {
 		id = -1;
@@ -73,7 +78,12 @@ public class Person {
 		this.type = type;
 	}
 
-	
-	
-	
+	public Blob getPicture() {
+		return picture;
+	}
+
+	public void setPicture(Blob picture) {
+		this.picture = picture;
+	}
+
 }
