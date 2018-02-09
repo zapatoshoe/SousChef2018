@@ -1,5 +1,10 @@
 package db.app.Person;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,5 +90,22 @@ public class PersonController {
 	public boolean validLogin(@RequestBody Person person) {
 		return personService.validLogin(person);
 	}
-	
+
+	//For converting image to Base64 for transmittal
+	@RequestMapping("/test")
+	public void setPicture() {
+		File file = new File("image.jpg");
+		String encodedfile = null;
+		try {
+			FileInputStream read = new FileInputStream(file);
+			byte[] bytes = new byte[(int)file.length()];
+			read.read(bytes);
+			encodedfile = Base64.getEncoder().encodeToString(bytes);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println(encodedfile);
+	}
 }

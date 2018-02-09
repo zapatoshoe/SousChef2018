@@ -11,4 +11,10 @@ public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer ingredientId;
+
+    public Ingredient(Integer id) {
+        ingredientId = id;
+    }
+
+    //TODO add all fields
 }
