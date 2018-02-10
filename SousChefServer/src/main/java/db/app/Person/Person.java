@@ -1,9 +1,6 @@
 package db.app.Person;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -35,9 +32,14 @@ public class Person {
 	 */
 	private String type;
 	/**
-	 * The person's image
+	 * The person's image encoded in Base64 string
 	 */
 	private Blob picture;
+	/**
+	 * The person's image encoded in Base64 string
+	 */
+	@Transient
+	private String image;
 
 	public Person() {
 		id = -1;
@@ -81,9 +83,15 @@ public class Person {
 	public Blob getPicture() {
 		return picture;
 	}
-
 	public void setPicture(Blob picture) {
 		this.picture = picture;
+	}
+
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 }

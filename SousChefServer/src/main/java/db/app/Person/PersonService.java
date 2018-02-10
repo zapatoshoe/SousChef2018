@@ -1,10 +1,14 @@
 package db.app.Person;
 
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLDecoder;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
+import db.app.DatabaseDummyApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +24,16 @@ public class PersonService {
 	 * @return The Person found or null if not found
 	 */
 	public Person getPerson(Integer id) {
-		return personRepository.findOne(id);
+		Person me = personRepository.findOne(id);
+		try {
+			int len = (int) me.getPicture().length();
+			byte[] bytes = me.getPicture().getBytes(1, len);
+			me.setImage(Base64.getEncoder().encodeToString(bytes));	//for sending over JSON
+			me.setPicture(null);	//for sending over JSON (cannot send Blob directly)
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return me;
 	}
 
 	/**
@@ -30,6 +43,20 @@ public class PersonService {
 	public List<Person> getAllPersons() {
 		List<Person> l = new ArrayList<>();
 		personRepository.findAll().forEach(l::add);
+		for(Person p : l) {
+			if(p.getPicture() == null)
+				continue;
+			int len = 0;
+			try {
+				len = (int) p.getPicture().length();
+				byte[] bytes = p.getPicture().getBytes(1, len);
+				p.setImage(Base64.getEncoder().encodeToString(bytes));	//for sending over JSON
+				p.setPicture(null);	//for sending over JSON (cannot send Blob directly)
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
 		return l;
 	}
 
@@ -78,4 +105,54 @@ public class PersonService {
 		return false;
 	}
 
+	//BLOB decoding for use on Client side
+    public void updatePerson1(Person person, Integer id) {
+		person.setId(id);
+		try {
+			PreparedStatement statement = DatabaseDummyApplication.db.prepareStatement("UPDATE person SET picture = ? WHERE id = ?");
+			statement.setBytes(1, readImage());
+			statement.setInt(2, 1);
+			statement.executeUpdate();
+			System.out.println("DONE");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		personRepository.save(person);	//same as add but repository knows to update existing rows
+		Person me = getAllPersons().get(0);
+		File file = new File("decoded.jpg");
+		try {
+			FileOutputStream fos = new FileOutputStream(file);
+			InputStream is = me.getPicture().getBinaryStream();
+			byte[] buffer = new byte[1024];
+			while(is.read(buffer)>0) {
+				fos.write(buffer);
+			}
+			if(fos!=null)
+				fos.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+    private byte[] readImage() {
+		ByteArrayOutputStream bos = null;
+		try {
+			File file = new File("image.jpg");
+			FileInputStream fis = new FileInputStream(file);
+			byte[] buffer = new byte[1024];
+			bos = new ByteArrayOutputStream();
+			for(int len; (len = fis.read(buffer))!= -1;) {
+				bos.write(buffer, 0, len);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return bos != null ? bos.toByteArray() : null;
+	}
 }

@@ -1,12 +1,16 @@
 package db.app.Person;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Base64;
 import java.util.List;
 
+import db.app.DatabaseDummyApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.imageio.ImageIO;
 
 /**
  * Handles any request at the url host/souschef/persons
@@ -94,18 +100,7 @@ public class PersonController {
 	//For converting image to Base64 for transmittal
 	@RequestMapping("/test")
 	public void setPicture() {
-		File file = new File("image.jpg");
-		String encodedfile = null;
-		try {
-			FileInputStream read = new FileInputStream(file);
-			byte[] bytes = new byte[(int)file.length()];
-			read.read(bytes);
-			encodedfile = Base64.getEncoder().encodeToString(bytes);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		System.out.println(encodedfile);
+		personService.updatePerson1(personService.getPerson(1), 1);
 	}
+
 }
