@@ -25,14 +25,6 @@ public class PersonService {
 	 */
 	public Person getPerson(Integer id) {
 		Person me = personRepository.findOne(id);
-		try {
-			int len = (int) me.getPicture().length();
-			byte[] bytes = me.getPicture().getBytes(1, len);
-			me.setImage(Base64.getEncoder().encodeToString(bytes));	//for sending over JSON
-			me.setPicture(null);	//for sending over JSON (cannot send Blob directly)
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 		return me;
 	}
 
@@ -43,20 +35,6 @@ public class PersonService {
 	public List<Person> getAllPersons() {
 		List<Person> l = new ArrayList<>();
 		personRepository.findAll().forEach(l::add);
-		for(Person p : l) {
-			if(p.getPicture() == null)
-				continue;
-			int len = 0;
-			try {
-				len = (int) p.getPicture().length();
-				byte[] bytes = p.getPicture().getBytes(1, len);
-				p.setImage(Base64.getEncoder().encodeToString(bytes));	//for sending over JSON
-				p.setPicture(null);	//for sending over JSON (cannot send Blob directly)
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
-		}
 		return l;
 	}
 
@@ -69,6 +47,7 @@ public class PersonService {
 	public Person addPerson(Person person) {
 		if(!personRepository.findByEmail(person.getEmail()).isEmpty())	//if the email is already in use, return a null person
 			return new Person();
+		person.convertStringToBlob();
 		personRepository.save(person);
 		return personRepository.findOne(person.getId());
 	}
@@ -80,6 +59,7 @@ public class PersonService {
 	 */
 	public void updatePerson(Person person, Integer id) {
 		person.setId(id);
+		person.convertStringToBlob();
 		personRepository.save(person);	//same as add but repository knows to update existing rows
 	}
 
@@ -118,24 +98,24 @@ public class PersonService {
 			e.printStackTrace();
 		}
 		personRepository.save(person);	//same as add but repository knows to update existing rows
-		Person me = getAllPersons().get(0);
-		File file = new File("decoded.jpg");
-		try {
-			FileOutputStream fos = new FileOutputStream(file);
-			InputStream is = me.getPicture().getBinaryStream();
-			byte[] buffer = new byte[1024];
-			while(is.read(buffer)>0) {
-				fos.write(buffer);
-			}
-			if(fos!=null)
-				fos.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		Person me = getAllPersons().get(0);
+//		File file = new File("decoded.jpg");
+//		try {
+//			FileOutputStream fos = new FileOutputStream(file);
+//			InputStream is = me.getPicture().getBinaryStream();
+//			byte[] buffer = new byte[1024];
+//			while(is.read(buffer)>0) {
+//				fos.write(buffer);
+//			}
+//			if(fos!=null)
+//				fos.close();
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
     private byte[] readImage() {
