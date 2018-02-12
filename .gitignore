@@ -1,8 +1,9 @@
 .metadata/
 .recommenders/
 *.class
-/.idea
+.idea
 /DatabaseDummy
-/SousChefServer/SousChefServer.iml
 /SousChefServer/target
 /SousChefServer/test
+*.iml
+RemoteSystemsTempFiles/

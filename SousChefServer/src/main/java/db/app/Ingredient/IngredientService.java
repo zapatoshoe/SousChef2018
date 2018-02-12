@@ -21,4 +21,8 @@ public class IngredientService {
         return l;
     }
 
+    public Ingredient getIngredient(Integer id){
+        return ingredientRepository.findOne(id);
+    }
+
 }

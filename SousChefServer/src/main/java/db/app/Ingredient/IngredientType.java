@@ -1,4 +1,4 @@
-package db.app;
+package db.app.Ingredient;
 
 public enum IngredientType {
     FRUIT, VEGETABLE, STARCH, GRAIN, NOODLE, SOUP, DAIRY, MEAT,
