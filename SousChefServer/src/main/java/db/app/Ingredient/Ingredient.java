@@ -21,6 +21,23 @@ public class Ingredient {
     private IngredientType type;
 
     /**
+     * Constructs an Ingredient object with blank fields
+     */
+    public Ingredient(){
+
+    }
+
+    /**
+     * Constructs an ingredient given an id and a type
+     * @param id the id desired for the ingredient
+     * @param type the type desired for the ingredient
+     */
+    public Ingredient(Integer id, IngredientType type){
+        this.ingredientId = id;
+        this.type = type;
+    }
+
+    /**
      * Gets the ingredient's ID
      * @return Ingredient's ID
      */
