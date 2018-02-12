@@ -87,20 +87,14 @@ public class PersonController {
 	}
 	
 	/**
-	 * Returns true if the Person in the body has the correct email and password
-	 * Body - The Person to verify
+	 * Returns the complete Person object if the Person in the body has the correct email and password
+	 * Body - The Person (email and password only) to verify
 	 * @param person The Person to verify
-	 * @return True if valid login, false otherwise
+	 * @return Complete Person object if true, Uninitialized person if false
 	 */
 	@RequestMapping(method=RequestMethod.POST, value="/login")	//POST to include body (Person)
-	public boolean validLogin(@RequestBody Person person) {
+	public Person validLogin(@RequestBody Person person) {
 		return personService.validLogin(person);
-	}
-
-	//For converting image to Base64 for transmittal
-	@RequestMapping("/test")
-	public void setPicture() {
-		personService.updatePerson1(personService.getPerson(1), 1);
 	}
 
 }

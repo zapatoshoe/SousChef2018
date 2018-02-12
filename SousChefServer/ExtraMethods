@@ -1,0 +1,61 @@
+//BLOB decoding for use on Client side
+	/**
+	 *
+	 * @param person
+	 * @param id
+	 */
+    public void updatePerson1(Person person, Integer id) {
+		person.setId(id);
+		//Stores the byte array (BLOB) in row 1 in the table
+		try {
+			PreparedStatement statement = DatabaseDummyApplication.db.prepareStatement("UPDATE person SET picture = ? WHERE id = ?");
+			statement.setBytes(1, readImage());
+			statement.setInt(2, 1);
+			statement.executeUpdate();
+			System.out.println("DONE");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		//Decodes the byte[] into an image
+//		Person me = getAllPersons().get(0);
+//		File file = new File("decoded.jpg");
+//		try {
+//			FileOutputStream fos = new FileOutputStream(file);
+//			InputStream is = me.getPicture().getBinaryStream();
+//			byte[] buffer = new byte[1024];
+//			while(is.read(buffer)>0) {
+//				fos.write(buffer);
+//			}
+//			if(fos!=null)
+//				fos.close();
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+	}
+
+	/**
+	 * Converts a .jpg (probably works for other formats) to a byte array
+	 * @return The image as a byte array
+	 */
+    private byte[] readImage() {
+		ByteArrayOutputStream bos = null;
+		try {
+			File file = new File("image.jpg");
+			FileInputStream fis = new FileInputStream(file);
+			byte[] buffer = new byte[1024];
+			bos = new ByteArrayOutputStream();
+			for(int len; (len = fis.read(buffer))!= -1;) {
+				bos.write(buffer, 0, len);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return bos != null ? bos.toByteArray() : null;
+	}
