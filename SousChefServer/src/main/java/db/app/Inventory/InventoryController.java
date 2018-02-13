@@ -20,14 +20,5 @@ public class InventoryController {
     public List<Ingredient> getAllIngredients(@PathVariable Integer ownerId) {
         return ingredientService.getAllIngredients(inventoryService.getInventory(ownerId));
     }
-<<<<<<< HEAD
 **/
-=======
-
-    @RequestMapping(method=RequestMethod.POST, path="/{ownerId}")
-    public void addToInventory( @PathVariable Integer ownerId, @RequestBody Ingredient ingredient) {
-        //TODO Decide whether client sends server the full Ingredient or just ingredientId (find actual Ingredient in table)
-    }
-
->>>>>>> master_db
 }

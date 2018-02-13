@@ -9,7 +9,6 @@ public class Ingredient {
      * Unique Identifier
      */
     @Id
-<<<<<<< HEAD
     private String name;
 
     /**
@@ -65,14 +64,4 @@ public class Ingredient {
     public void setType(IngredientType type) {
         this.type = type;
     }
-=======
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer ingredientId;
-
-    public Ingredient(Integer id) {
-        ingredientId = id;
-    }
-
-    //TODO add all fields
->>>>>>> master_db
 }
