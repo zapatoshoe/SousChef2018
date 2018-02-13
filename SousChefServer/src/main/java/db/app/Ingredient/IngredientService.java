@@ -13,9 +13,20 @@ public class IngredientService {
     @Autowired
     private IngredientRepository ingredientRepository;
 
+<<<<<<< HEAD
     public List<Ingredient> getAllIngredients() {
         List<Ingredient> l = new ArrayList<>();
         ingredientRepository.findAll().forEach(l::add);
+=======
+    public List<Ingredient> getAllIngredients(List<Inventory> inv) {
+
+        List<Ingredient> l = new ArrayList<>();
+        l.add(new Ingredient(2));   //For testing purposes only
+        l.add(new Ingredient(3));   //For testing purposes only
+        for(Inventory i : inv) {
+            l.add(ingredientRepository.findOne(i.getIngredientId()));
+        }
+>>>>>>> master_db
         return l;
     }
 

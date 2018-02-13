@@ -3,9 +3,7 @@ package db.app.Inventory;
 import db.app.Ingredient.IngredientService;
 import db.app.Ingredient.Ingredient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +20,14 @@ public class InventoryController {
     public List<Ingredient> getAllIngredients(@PathVariable Integer ownerId) {
         return ingredientService.getAllIngredients(inventoryService.getInventory(ownerId));
     }
+<<<<<<< HEAD
 **/
+=======
+
+    @RequestMapping(method=RequestMethod.POST, path="/{ownerId}")
+    public void addToInventory( @PathVariable Integer ownerId, @RequestBody Ingredient ingredient) {
+        //TODO Decide whether client sends server the full Ingredient or just ingredientId (find actual Ingredient in table)
+    }
+
+>>>>>>> master_db
 }

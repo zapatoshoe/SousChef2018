@@ -7,3 +7,6 @@
 /SousChefServer/test
 *.iml
 RemoteSystemsTempFiles/
+/SousChefServer/index-files
+/SousChefServer/.idea
+

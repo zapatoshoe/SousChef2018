@@ -1,7 +1,16 @@
 package db.app.Person;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Base64;
 import java.util.List;
 
+import db.app.DatabaseDummyApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.imageio.ImageIO;
 
 /**
  * Handles any request at the url host/souschef/persons
@@ -76,14 +87,14 @@ public class PersonController {
 	}
 	
 	/**
-	 * Returns true if the Person in the body has the correct email and password
-	 * Body - The Person to verify
+	 * Returns the complete Person object if the Person in the body has the correct email and password
+	 * Body - The Person (email and password only) to verify
 	 * @param person The Person to verify
-	 * @return True if valid login, false otherwise
+	 * @return Complete Person object if true, Uninitialized person if false
 	 */
 	@RequestMapping(method=RequestMethod.POST, value="/login")	//POST to include body (Person)
-	public boolean validLogin(@RequestBody Person person) {
+	public Person validLogin(@RequestBody Person person) {
 		return personService.validLogin(person);
 	}
-	
+
 }
