@@ -3,6 +3,7 @@ package db.app.Person;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import db.app.Ingredient.Ingredient;
+import db.app.Inventory.Inventory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,6 +16,7 @@ import java.net.URLDecoder;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Base64;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -53,8 +55,8 @@ public class Person {
 	@Transient
 	private String image;
 
-//	@OneToMany(mappedBy = "ownerId", cascade = CascadeType.ALL)
-//	private Set<Ingredient> ingredients;
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Inventory> inventory;
 
 	public Person() {
 		id = -1;
@@ -144,11 +146,11 @@ public class Person {
 		}
 	}
 
-//	public Set<Ingredient> getIngredients() {
-//		return ingredients;
-//	}
-//	public void setIngredients(Set<Ingredient> ingredients) {
-//		this.ingredients = ingredients;
-//	}
+	public List<Inventory> getInventory() {
+		return inventory;
+	}
+	public void setIngredients(List<Inventory> inventory) {
+		this.inventory = inventory;
+	}
 
 }

@@ -3,6 +3,8 @@ package db.app.Person;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import db.app.Ingredient.Ingredient;
+import db.app.Inventory.Inventory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -34,20 +36,20 @@ public class PersonSerializer extends StdSerializer<Person> {
         jgen.writeStringField("email", person.getEmail());
         jgen.writeFieldName("ingredients");
         jgen.writeStartArray();
-        //Testing purposes only
-        for(int i=0; i<3; i++) {
-            jgen.writeStartObject();
-            jgen.writeStringField("name", person.getName()+"'s item "+i);
-            jgen.writeNumberField("type", i);
-            jgen.writeEndObject();
-        }
-//        for(Ingredient i : person.getIngredients()) {
+//        //Testing purposes only
+//        for(int i=0; i<3; i++) {
 //            jgen.writeStartObject();
-//            jgen.writeNumberField("id", i.getId());
-//            jgen.writeStringField("name", i.getName());
-//            jgen.writeStringField("type", i.getType());
+//            jgen.writeStringField("name", person.getName()+"'s item "+i);
+//            jgen.writeNumberField("type", i);
 //            jgen.writeEndObject();
 //        }
+        for(Inventory item : person.getInventory()) {
+            Ingredient i = item.getIngredient();
+            jgen.writeStartObject();
+            jgen.writeStringField("name", i.getName());
+            jgen.writeStringField("type", i.getType().name());
+            jgen.writeEndObject();
+        }
         jgen.writeEndArray();
         jgen.writeStringField("image", person.getImage());
         jgen.writeEndObject();

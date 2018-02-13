@@ -25,7 +25,7 @@ public class PersonService {
 	 */
 	public Person getPerson(Integer id) {
 		Person me = personRepository.findOne(id);
-		return me;
+		return me == null ? new Person() : me;
 	}
 
 	/**
