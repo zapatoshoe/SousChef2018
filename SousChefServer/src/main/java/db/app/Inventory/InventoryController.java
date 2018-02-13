@@ -17,10 +17,10 @@ public class InventoryController {
     private InventoryService inventoryService;
     @Autowired
     private IngredientService ingredientService;
-
+/**
     @RequestMapping("/{ownerId}")
     public List<Ingredient> getAllIngredients(@PathVariable Integer ownerId) {
         return ingredientService.getAllIngredients(inventoryService.getInventory(ownerId));
     }
-
+**/
 }

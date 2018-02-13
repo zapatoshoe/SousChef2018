@@ -13,16 +13,18 @@ public class IngredientService {
     @Autowired
     private IngredientRepository ingredientRepository;
 
-    public List<Ingredient> getAllIngredients(List<Inventory> inv) {
+    public List<Ingredient> getAllIngredients() {
         List<Ingredient> l = new ArrayList<>();
-        for(Inventory i : inv) {
-            l.add(ingredientRepository.findOne(i.getIngredientId()));
-        }
+        ingredientRepository.findAll().forEach(l::add);
         return l;
     }
 
-    public Ingredient getIngredient(Integer id){
-        return ingredientRepository.findOne(id);
+    public Ingredient getIngredient(String name){
+        return ingredientRepository.findOne(name);
+    }
+
+    public void addIngredient(Ingredient ingredient){
+        ingredientRepository.save(ingredient);
     }
 
 }

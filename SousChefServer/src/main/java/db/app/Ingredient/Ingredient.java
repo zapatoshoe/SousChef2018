@@ -1,9 +1,6 @@
 package db.app.Ingredient;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Ingredient {
@@ -12,12 +9,12 @@ public class Ingredient {
      * Unique Identifier
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer ingredientId;
+    private String name;
 
     /**
      * Identifies the ingredient by type
      */
+    @Enumerated(EnumType.STRING)
     private IngredientType type;
 
     /**
@@ -29,28 +26,27 @@ public class Ingredient {
 
     /**
      * Constructs an ingredient given an id and a type
-     * @param id the id desired for the ingredient
      * @param type the type desired for the ingredient
      */
-    public Ingredient(Integer id, IngredientType type){
-        this.ingredientId = id;
+    public Ingredient(String name, IngredientType type){
+        this.name = name;
         this.type = type;
     }
 
     /**
-     * Gets the ingredient's ID
-     * @return Ingredient's ID
+     * Gets the ingredient's name
+     * @return Ingredient's name
      */
-    public Integer getIngredientId() {
-        return ingredientId;
+    public String getName() {
+        return name;
     }
 
     /**
      * Sets an Ingredient's ID
-     * @param ingredientId the ID to be given to the Ingredient
+     * @param name the ID to be given to the Ingredient
      */
-    public void setIngredientId(Integer ingredientId) {
-        this.ingredientId = ingredientId;
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
