@@ -24,6 +24,8 @@ public class Inventory {
         this.ingredient = ingredient;
     }
 
+    public Integer getId() {return inventoryId; }
+
     public Person getOwner() {
         return owner;
     }

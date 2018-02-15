@@ -40,7 +40,7 @@ public class PersonSerializer extends StdSerializer<Person> {
             Ingredient i = item.getIngredient();
             jgen.writeStartObject();
             jgen.writeStringField("name", i.getName());
-            jgen.writeStringField("type", i.getType().name());
+            jgen.writeStringField("type", i.getType().toString());
             jgen.writeEndObject();
         }
         jgen.writeEndArray();

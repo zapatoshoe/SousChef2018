@@ -64,4 +64,20 @@ public class Ingredient {
     public void setType(IngredientType type) {
         this.type = type;
     }
+
+    @Override
+    public boolean equals(Object ingredient){
+        if(!(ingredient instanceof Ingredient)){
+            return false;
+        }
+        if(this.name.equals(((Ingredient)ingredient).name)){
+            return true;
+        }
+        return false;
+    }
+
 }
+
+
+
+
