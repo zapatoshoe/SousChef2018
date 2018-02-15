@@ -38,4 +38,23 @@ public class InventoryService {
         Person me = personService.getPerson(ownerId);
         inventoryRepository.save(new Inventory(me, ingredient));
     }
+
+    public void deleteFromInventory(Integer ownerId, Ingredient ingredient){
+        List<Inventory> l = inventoryRepository.findByOwnerId(ownerId);
+        for(Inventory i: l){
+            if(i.getIngredient().equals(ingredient)){
+                inventoryRepository.delete(i.getId());
+                return;
+            }
+        }
+
+    }
+
+    public void deleteAllInventory(Integer ownerId){
+        List<Inventory> l = inventoryRepository.findByOwnerId(ownerId);
+        for(Inventory i: l){
+            inventoryRepository.delete(i.getId());
+        }
+    }
+
 }

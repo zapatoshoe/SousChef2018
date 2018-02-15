@@ -26,4 +26,14 @@ public class InventoryController {
         inventoryService.addToInventory(ingredient, ownerId);
     }
 
+    @RequestMapping(method=RequestMethod.DELETE, value="/{ownerId}")
+    public void deleteFromInventory(@PathVariable Integer ownerId, @RequestBody Ingredient ingredient){
+        inventoryService.deleteFromInventory(ownerId, ingredient);
+    }
+/**
+    @RequestMapping(method=RequestMethod.DELETE, value="/{ownerId}")
+    public void deleteAllInventory(@PathVariable Integer ownerId){
+        inventoryService.deleteAllInventory(ownerId);
+    }
+**/
 }
