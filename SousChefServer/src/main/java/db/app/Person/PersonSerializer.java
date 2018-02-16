@@ -36,12 +36,14 @@ public class PersonSerializer extends StdSerializer<Person> {
         jgen.writeStringField("email", person.getEmail());
         jgen.writeFieldName("ingredients");
         jgen.writeStartArray();
-        for(Inventory item : person.getInventory()) {
-            Ingredient i = item.getIngredient();
-            jgen.writeStartObject();
-            jgen.writeStringField("name", i.getName());
-            jgen.writeStringField("type", i.getType().toString());
-            jgen.writeEndObject();
+        if(person.getInventory() != null) {
+            for (Inventory item : person.getInventory()) {
+                Ingredient i = item.getIngredient();
+                jgen.writeStartObject();
+                jgen.writeStringField("name", i.getName());
+                jgen.writeStringField("type", i.getType().toString());
+                jgen.writeEndObject();
+            }
         }
         jgen.writeEndArray();
         jgen.writeStringField("image", person.getImage());

@@ -31,4 +31,8 @@ public class IngredientService {
     public void deleteIngredient(String name){
         ingredientRepository.delete(name);
     }
+
+    public List<Ingredient> getAllByType(IngredientType type) {
+        return ingredientRepository.findByType(type);
+    }
 }

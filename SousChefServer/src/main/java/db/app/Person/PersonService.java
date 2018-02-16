@@ -77,11 +77,12 @@ public class PersonService {
 	 * @return The complete Person if good login, an uninitialized Person otherwise
 	 */
 	public Person validLogin(Person person) {
-		Person actual = null;
+		Person actual = new Person();
 		List<Person> people = personRepository.findByEmail(person.getEmail());
 		if(people == null || people.size() != 1)
-			return new Person();
+			return actual;
 		actual = people.get(0);
+		System.out.println(actual.getPassword()+'\n'+person.getPassword());
 		return actual.getPassword().equals(person.getPassword()) ? actual : new Person();//if they have the same password - good login
 	}
 

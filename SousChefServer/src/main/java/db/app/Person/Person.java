@@ -60,6 +60,8 @@ public class Person {
 
 	public Person() {
 		id = -1;
+		picture = null;
+		image = null;
 	}
 	
 	public Integer getId() {
@@ -124,7 +126,7 @@ public class Person {
 			len = (int) this.getPicture().length();
 			byte[] bytes = this.getPicture().getBytes(1, len);
 			this.setImage(Base64.getEncoder().encodeToString(bytes));	//for sending over JSON
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

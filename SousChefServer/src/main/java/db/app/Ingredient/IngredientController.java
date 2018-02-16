@@ -17,6 +17,11 @@ public class IngredientController {
         return ingredientService.getAllIngredients();
     }
 
+    @RequestMapping("/type/{type}")
+    public List<Ingredient> getAllByType(@PathVariable IngredientType type) {
+        return ingredientService.getAllByType(type);
+    }
+
     @RequestMapping("/{name}")
     public Ingredient getIngredient(@PathVariable String name){
         return ingredientService.getIngredient(name);
