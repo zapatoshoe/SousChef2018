@@ -30,23 +30,23 @@ public class PersonSerializer extends StdSerializer<Person> {
     @Override
     public void serialize(Person person, JsonGenerator jgen, SerializerProvider provider) throws IOException {
         person.prepForSerialization();  //Converts picture from Blob to image as String
-        jgen.writeStartObject();
-        jgen.writeNumberField("id", person.getId());
-        jgen.writeStringField("name", person.getName());
-        jgen.writeStringField("email", person.getEmail());
-        jgen.writeFieldName("ingredients");
-        jgen.writeStartArray();
-        if(person.getInventory() != null) {
+        jgen.writeStartObject();    //{
+        jgen.writeNumberField("id", person.getId());    //"id": person.getId,
+        jgen.writeStringField("name", person.getName());    //"name": "person.getName()",
+        jgen.writeStringField("email", person.getEmail());  //"email": "person.getEmail()",
+        jgen.writeFieldName("ingredients");     //"ingredients":
+        jgen.writeStartArray(); //[
+        if(person.getInventory() != null) {     //if they have an inventory
             for (Inventory item : person.getInventory()) {
                 Ingredient i = item.getIngredient();
-                jgen.writeStartObject();
-                jgen.writeStringField("name", i.getName());
-                jgen.writeStringField("type", i.getType().toString());
-                jgen.writeEndObject();
+                jgen.writeStartObject();    //{
+                jgen.writeStringField("name", i.getName());     //"name": "i.getName()",
+                jgen.writeStringField("type", i.getType().toString());  //"type": "i.getType()"
+                jgen.writeEndObject();  //},
             }
         }
-        jgen.writeEndArray();
-        jgen.writeStringField("image", person.getImage());
-        jgen.writeEndObject();
+        jgen.writeEndArray();   //],
+        jgen.writeStringField("image", person.getImage());  //"image": "person.getImage()"
+        jgen.writeEndObject();  //}
     }
 }

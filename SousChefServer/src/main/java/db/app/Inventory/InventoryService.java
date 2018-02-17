@@ -36,9 +36,8 @@ public class InventoryService {
 
     public void addToInventory(Ingredient ingredient, Integer ownerId) {
         Person me = personService.getPerson(ownerId);
-        Inventory toAdd = new Inventory(me, ingredient);
-        if(!me.getInventory().contains(toAdd)) {
-            inventoryRepository.save(toAdd);
+        if(!me.getInventory().contains(new Inventory(me, ingredient))) {
+            inventoryRepository.save(new Inventory(me, ingredient));
         }
     }
 

@@ -1,11 +1,13 @@
 package db.app.Recipe;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import db.app.Person.Person;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@JsonSerialize(using = RecipeSerializer.class)
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,6 +28,9 @@ public class Recipe {
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RInventory> inv;
+
+//    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<Step> steps; //TODO
 
     public Integer getId() {
         return id;
