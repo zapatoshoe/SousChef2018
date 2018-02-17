@@ -44,4 +44,9 @@ public class Inventory {
     public void setIngredient(Ingredient ingredient) {
         this.ingredient = ingredient;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Inventory && this.ingredient.equals(((Inventory)o).ingredient);
+    }
 }

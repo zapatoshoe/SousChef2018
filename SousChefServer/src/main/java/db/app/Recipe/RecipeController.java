@@ -13,6 +13,17 @@ public class RecipeController {
     @Autowired
     private RecipeService recipeService;
 
+
+    /**
+     * Returns all of a Person's recipes
+     * @param ownerId The Person whose recipes you want
+     * @return A List of recipes belonging to that owner
+     */
+    @RequestMapping("/{ownerId}")
+    public List<Recipe> getPersonsRecipes(@PathVariable Integer ownerId) {
+        return recipeService.getPersonRecipes(ownerId);
+    }
+
     /**
      * Adds a recipe to the database with the specified owner
      * @param recipe The recipe to be added to the database
@@ -23,14 +34,14 @@ public class RecipeController {
         recipeService.addRecipe(ownerId, recipe);
     }
 
-    /**
-     * Returns all of a Person's recipes
-     * @param ownerId The Person whose recipes you want
-     * @return A List of recipes belonging to that owner
-     */
-    @RequestMapping("/{ownerId}")
-    public List<Recipe> getPersonsRecipes(@PathVariable Integer ownerId) {
-        return recipeService.getPersonRecipes(ownerId);
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{recipeId}")
+    public void deleteRecipe(@PathVariable Integer recipeId) {
+        recipeService.deleteRecipe(recipeId);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/{recipeId}")
+    public void updateRecipe(@PathVariable Integer recipeId, @RequestBody Recipe newRecipe) {
+        recipeService.updateRecipe(recipeId, newRecipe);
     }
 
     /**
@@ -47,16 +58,6 @@ public class RecipeController {
     @RequestMapping(method = RequestMethod.DELETE, value = "/{recipeId}/{ingredientName}")
     public void removeFromRecipe(@PathVariable Integer recipeId, @PathVariable String ingredientName) {
         recipeService.removeIngredientFromRecipe(recipeId, ingredientName);
-    }
-
-    @RequestMapping(method = RequestMethod.PUT, value = "/{recipeId}")
-    public void updateRecipe(@PathVariable Integer recipeId, @RequestBody Recipe newRecipe) {
-        recipeService.updateRecipe(recipeId, newRecipe);
-    }
-
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{recipeId}")
-    public void deleteRecipe(@PathVariable Integer recipeId) {
-        recipeService.deleteRecipe(recipeId);
     }
 
 }
