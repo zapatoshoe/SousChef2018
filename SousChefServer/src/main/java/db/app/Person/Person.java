@@ -16,6 +16,7 @@ import java.net.URLDecoder;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -45,6 +46,14 @@ public class Person {
 	 * Their type - Chef, Author, or Admin
 	 */
 	private String type;
+	/**
+	 * The date the person was created
+	 */
+	private Date created;
+	/**
+	 * The date the user last logged on
+	 */
+	private Date lastLogin;
 	/**
 	 * The person's image as a Blob (can't be sent over JSON)
 	 */
@@ -99,17 +108,33 @@ public class Person {
 		this.type = type;
 	}
 
-	public Blob getPicture() {
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+
+	public Date getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(Date lastLogin) {
+		this.lastLogin = lastLogin;
+	}
+
+	private Blob getPicture() {
 		return picture;
 	}
-	public void setPicture(Blob picture) {
+	private void setPicture(Blob picture) {
 		this.picture = picture;
 	}
 
 	public String getImage() {
 		return image;
 	}
-	public void setImage(String image) {
+	private void setImage(String image) {
 		this.image = image;
 	}
 
@@ -122,7 +147,7 @@ public class Person {
 				image = null;
 				return;
 			}
-			int len = 0;
+			int len;
 			len = (int) this.getPicture().length();
 			byte[] bytes = this.getPicture().getBytes(1, len);
 			this.setImage(Base64.getEncoder().encodeToString(bytes));	//for sending over JSON
@@ -141,8 +166,6 @@ public class Person {
 			byte[] bytes = Base64.getDecoder().decode(this.getImage());
 			Blob b = new SerialBlob(bytes);
 			this.setPicture(b);
-		} catch (SerialException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

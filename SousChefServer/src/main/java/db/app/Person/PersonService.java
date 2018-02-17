@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
 import db.app.DatabaseDummyApplication;
@@ -48,6 +49,7 @@ public class PersonService {
 		if(!personRepository.findByEmail(person.getEmail()).isEmpty())	//if the email is already in use, return a null person
 			return new Person();
 		person.convertStringToBlob();
+		person.setCreated(new Date());
 		personRepository.save(person);
 		return personRepository.findOne(person.getId());
 	}
@@ -77,13 +79,17 @@ public class PersonService {
 	 * @return The complete Person if good login, an uninitialized Person otherwise
 	 */
 	public Person validLogin(Person person) {
-		Person actual = new Person();
+		Person actual;
 		List<Person> people = personRepository.findByEmail(person.getEmail());
 		if(people == null || people.size() != 1)
-			return actual;
+			return new Person();
 		actual = people.get(0);
-		System.out.println(actual.getPassword()+'\n'+person.getPassword());
-		return actual.getPassword().equals(person.getPassword()) ? actual : new Person();//if they have the same password - good login
+		if(actual.getPassword().equals(person.getPassword())) {
+			actual.setLastLogin(new Date());
+			personRepository.save(actual);
+			return actual;
+		}
+		return new Person();
 	}
 
 }

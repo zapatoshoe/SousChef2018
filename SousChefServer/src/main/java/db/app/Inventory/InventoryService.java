@@ -26,7 +26,7 @@ public class InventoryService {
     public List<Ingredient> getUserIngredients(Integer ownerId) {
         Person p = personService.getPerson(ownerId);
         List<Inventory> inventory = inventoryRepository.findByOwnerId(ownerId);
-        List<Ingredient> ingredients = new ArrayList<Ingredient>();
+        List<Ingredient> ingredients = new ArrayList<>();
         for(Inventory i : inventory) {
             Ingredient ingredient = i.getIngredient();
             ingredients.add(ingredient);
@@ -36,7 +36,10 @@ public class InventoryService {
 
     public void addToInventory(Ingredient ingredient, Integer ownerId) {
         Person me = personService.getPerson(ownerId);
-        inventoryRepository.save(new Inventory(me, ingredient));
+        Inventory toAdd = new Inventory(me, ingredient);
+        if(!me.getInventory().contains(toAdd)) {
+            inventoryRepository.save(toAdd);
+        }
     }
 
     public void deleteFromInventory(Integer ownerId, Ingredient ingredient){
