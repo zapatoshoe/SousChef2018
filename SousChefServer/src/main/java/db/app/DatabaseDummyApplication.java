@@ -22,7 +22,7 @@ public class DatabaseDummyApplication {
 		SpringApplication.run(DatabaseDummyApplication.class, args);
 		System.out.println(InetAddress.getLocalHost());
 		try {
-			db = DriverManager.getConnection("jdbc:mysql://mysql.cs.iastate.edu/db309yt1?autoReconnect=true", "dbu309yt1", "vtdSg4aB");
+			db = DriverManager.getConnection("jdbc:mysql://mysql.cs.iastate.edu/db309yt1?autoReconnect=true&useSSL=false", "dbu309yt1", "vtdSg4aB");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
