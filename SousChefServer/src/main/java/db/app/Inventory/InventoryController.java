@@ -21,19 +21,18 @@ public class InventoryController {
         return inventoryService.getUserIngredients(ownerId);
     }
 
-    @RequestMapping(value = "/{ownerId}", method = RequestMethod.POST)
-    public void addToInventory(@PathVariable Integer ownerId, @RequestBody Ingredient ingredient) {
-        inventoryService.addToInventory(ingredient, ownerId);
+    @RequestMapping(value = "/{ownerId}/{ingredientName}", method = RequestMethod.POST)
+    public void addToInventory(@PathVariable Integer ownerId, @PathVariable String ingredientName, @RequestBody Inventory inventory) {
+        inventoryService.addToInventory(inventory, ingredientName, ownerId);
     }
 
-    @RequestMapping(method=RequestMethod.DELETE, value="/{ownerId}")
-    public void deleteFromInventory(@PathVariable Integer ownerId, @RequestBody Ingredient ingredient){
-        inventoryService.deleteFromInventory(ownerId, ingredient);
+    @RequestMapping(method=RequestMethod.DELETE, value="/{ownerId}/{ingredientName}")
+    public void deleteFromInventory(@PathVariable Integer ownerId, @PathVariable String ingredientName){
+        inventoryService.deleteFromInventory(ownerId, ingredientName);
     }
-/**
-    @RequestMapping(method=RequestMethod.DELETE, value="/{ownerId}")
-    public void deleteAllInventory(@PathVariable Integer ownerId){
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{ownerId}/deleteall")
+    public void deletePersonInventory(@PathVariable Integer ownerId) {
         inventoryService.deleteAllInventory(ownerId);
     }
-**/
 }

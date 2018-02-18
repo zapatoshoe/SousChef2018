@@ -2,6 +2,8 @@ package db.app.Inventory;
 
 import db.app.Ingredient.Ingredient;
 import db.app.Person.Person;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -9,6 +11,7 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "Inv_Type")
 @DiscriminatorValue(value = "Inventory")
+@OnDelete(action = OnDeleteAction.CASCADE)
 public class Inventory {
 
     @Id

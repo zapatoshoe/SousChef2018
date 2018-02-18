@@ -90,6 +90,7 @@ public class RecipeService {
         for(RInventory i : ingredients) {
             if(i.getIngredient().equals(actual)) {
                 try {
+                    //Due to Inheritance issues, a statement must be used in order to correctly delete the Inventory
                     PreparedStatement stmt = DatabaseDummyApplication.db.prepareStatement("DELETE FROM db309yt1.inventory WHERE inventory_id=?;");
                     stmt.setInt(1, i.getId());
                     stmt.executeUpdate();

@@ -2,6 +2,7 @@ package db.app.Inventory;
 
 import db.app.Ingredient.Ingredient;
 import db.app.Ingredient.IngredientRepository;
+import db.app.Ingredient.IngredientService;
 import db.app.Person.Person;
 import db.app.Person.PersonService;
 import org.hibernate.Hibernate;
@@ -18,6 +19,8 @@ public class InventoryService {
     private InventoryRepository inventoryRepository;
     @Autowired
     private PersonService personService;
+    @Autowired
+    private IngredientService ingredientService;
 
     public List<Inventory> getInventory(Integer ownerId){
         return inventoryRepository.findByOwnerId(ownerId);
@@ -34,17 +37,23 @@ public class InventoryService {
         return ingredients;
     }
 
-    public void addToInventory(Ingredient ingredient, Integer ownerId) {
+    public void addToInventory(Inventory inventory, String ingredientName, Integer ownerId) {
         Person me = personService.getPerson(ownerId);
-        if(!me.getInventory().contains(new Inventory(me, ingredient))) {
-            inventoryRepository.save(new Inventory(me, ingredient));
+        inventory.setOwner(me);
+        inventory.setIngredient(ingredientService.getIngredient(ingredientName));
+        if(inventory.getIngredient() == null)
+            return;
+        if(me.getInventory() == null || !me.getInventory().contains(inventory)) {
+            inventoryRepository.save(inventory);
         }
     }
 
-    public void deleteFromInventory(Integer ownerId, Ingredient ingredient){
+    public void deleteFromInventory(Integer ownerId, String ingredientName){
         List<Inventory> l = inventoryRepository.findByOwnerId(ownerId);
+        if(l == null)
+            return;
         for(Inventory i: l){
-            if(i.getIngredient().equals(ingredient)){
+            if(i.getIngredient().getName().equals(ingredientName)){
                 inventoryRepository.delete(i.getId());
                 return;
             }
@@ -54,9 +63,10 @@ public class InventoryService {
 
     public void deleteAllInventory(Integer ownerId){
         List<Inventory> l = inventoryRepository.findByOwnerId(ownerId);
+        if(l == null)
+            return;
         for(Inventory i: l){
             inventoryRepository.delete(i.getId());
         }
     }
-
 }
