@@ -8,9 +8,6 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "Inv_Type")
-@DiscriminatorValue(value = "Inventory")
 public class Inventory {
 
     @Id

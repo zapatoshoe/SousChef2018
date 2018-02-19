@@ -3,7 +3,6 @@ package db.app.Recipe;
 import db.app.DatabaseDummyApplication;
 import db.app.Ingredient.Ingredient;
 import db.app.Ingredient.IngredientService;
-import db.app.Inventory.InventoryRepository;
 import db.app.Person.Person;
 import db.app.Person.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 @Service
@@ -22,7 +20,7 @@ public class RecipeService {
     @Autowired
     private PersonService personService;
     @Autowired
-    private InventoryRepository inventoryRepository;
+    private RInventoryRepository rInventoryRepository;
     @Autowired
     private IngredientService ingredientService;
 
@@ -87,8 +85,7 @@ public class RecipeService {
             return;
         inventory.setIngredient(i);       //set the ingredient properly
         inventory.setRecipe(recipe);
-        inventory.setOwner(recipe.getOwner());
-        inventoryRepository.save(inventory);
+        rInventoryRepository.save(inventory);
     }
 
     /**

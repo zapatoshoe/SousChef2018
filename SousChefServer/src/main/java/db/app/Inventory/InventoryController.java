@@ -21,7 +21,7 @@ public class InventoryController {
         return inventoryService.getUserIngredients(ownerId);
     }
 
-    @RequestMapping(value = "/{ownerId}/{ingredientName}", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, value = "/{ownerId}/{ingredientName}")
     public void addToInventory(@PathVariable Integer ownerId, @PathVariable String ingredientName, @RequestBody Inventory inventory) {
         inventoryService.addToInventory(inventory, ingredientName, ownerId);
     }
