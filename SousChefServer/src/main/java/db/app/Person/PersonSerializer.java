@@ -20,13 +20,6 @@ public class PersonSerializer extends StdSerializer<Person> {
         super(t);
     }
 
-    /**
-     * Serializes a Person by including their inventory as a field
-     * @param person
-     * @param jgen
-     * @param provider
-     * @throws IOException
-     */
     @Override
     public void serialize(Person person, JsonGenerator jgen, SerializerProvider provider) throws IOException {
         person.prepForSerialization();  //Converts picture from Blob to image as String
@@ -34,6 +27,7 @@ public class PersonSerializer extends StdSerializer<Person> {
         jgen.writeNumberField("id", person.getId());    //"id": person.getId,
         jgen.writeStringField("name", person.getName());    //"name": "person.getName()",
         jgen.writeStringField("email", person.getEmail());  //"email": "person.getEmail()",
+        jgen.writeStringField("type", person.getType());    //"type": "person.getType(),"
         jgen.writeFieldName("ingredients");     //"ingredients":
         jgen.writeStartArray(); //[
         if(person.getInventory() != null) {     //if they have an inventory
@@ -46,7 +40,9 @@ public class PersonSerializer extends StdSerializer<Person> {
             }
         }
         jgen.writeEndArray();   //],
-        jgen.writeStringField("image", person.getImage());  //"image": "person.getImage()"
+        jgen.writeStringField("image", person.getImage());  //"image": "person.getImage()",
+        jgen.writeStringField("created", person.getCreated().toString());   //"created": "person.getCreated()",
+        jgen.writeStringField("lastLogin", person.getLastLogin().toString());   //"lastLogin": "person.getLastLogin()",
         jgen.writeEndObject();  //}
     }
 }

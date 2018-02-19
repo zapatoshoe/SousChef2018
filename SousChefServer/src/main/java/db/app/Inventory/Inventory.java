@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "Inv_Type")
 @DiscriminatorValue(value = "Inventory")
-@OnDelete(action = OnDeleteAction.CASCADE)
 public class Inventory {
 
     @Id

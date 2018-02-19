@@ -10,7 +10,6 @@ import javax.persistence.ManyToOne;
 
 @Entity(name = "RecipeItem")
 @DiscriminatorValue("RecipeItem")
-@OnDelete(action = OnDeleteAction.CASCADE)
 public class RInventory extends Inventory {
 
     @ManyToOne

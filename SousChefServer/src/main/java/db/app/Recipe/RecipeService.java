@@ -43,15 +43,25 @@ public class RecipeService {
      */
     public void addRecipe(Integer ownerId, Recipe recipe) {
         Person person = personService.getPerson(ownerId);
+        if(person == null)
+            return;
         recipe.setOwner(person);    //ensure properly setting the Person field
         recipeRepository.save(recipe);
     }
 
-
+    /**
+     * Removes a recipe from the database
+     * @param recipeId The id of the Recipe to be deleted
+     */
     public void deleteRecipe(Integer recipeId) {
         recipeRepository.delete(recipeId);
     }
 
+    /**
+     * Updates the information of an existing Recipe
+     * @param recipeId The Recipe to be updated
+     * @param newRecipe The new Recipe data to be changed
+     */
     public void updateRecipe(Integer recipeId, Recipe newRecipe) {
         Recipe old = recipeRepository.findOne(recipeId);
         if(old == null)
@@ -81,16 +91,25 @@ public class RecipeService {
         inventoryRepository.save(inventory);
     }
 
+    /**
+     * Removes an Ingredient (Inventory) from a Recipe
+     * @param recipeId The Recipe to be operated on
+     * @param ingredientName The Ingredient to be removed
+     */
     public void removeIngredientFromRecipe(Integer recipeId, String ingredientName) {
         Recipe recipe = recipeRepository.findOne(recipeId);
+        if(recipe == null)
+            return;
         List<RInventory> ingredients = recipe.getInv();
         if(ingredients == null)
             return;
         Ingredient actual = ingredientService.getIngredient(ingredientName);
+        if(actual == null)
+            return;
         for(RInventory i : ingredients) {
             if(i.getIngredient().equals(actual)) {
                 try {
-                    //Due to Inheritance issues, a statement must be used in order to correctly delete the Inventory
+                    //Due to Inheritance issues, a statement must be used in order to correctly delete the RInventory
                     PreparedStatement stmt = DatabaseDummyApplication.db.prepareStatement("DELETE FROM db309yt1.inventory WHERE inventory_id=?;");
                     stmt.setInt(1, i.getId());
                     stmt.executeUpdate();

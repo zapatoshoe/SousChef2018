@@ -18,6 +18,7 @@ public class Recipe {
 
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private Integer prepMins;
@@ -31,6 +32,8 @@ public class Recipe {
 
 //    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    private List<Step> steps; //TODO
+//    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<Review> reviews; //TODO
 
     public Integer getId() {
         return id;

@@ -34,11 +34,20 @@ public class RecipeController {
         recipeService.addRecipe(ownerId, recipe);
     }
 
+    /**
+     * Deletes a recipe from the Repository
+     * @param recipeId The id of the Recipe to be deleted
+     */
     @RequestMapping(method = RequestMethod.DELETE, value = "/{recipeId}")
     public void deleteRecipe(@PathVariable Integer recipeId) {
         recipeService.deleteRecipe(recipeId);
     }
 
+    /**
+     * Updates the info of an existing Recipe to the new info
+     * @param recipeId The id of the existing recipe
+     * @param newRecipe The new info for the Recipe
+     */
     @RequestMapping(method = RequestMethod.PUT, value = "/{recipeId}")
     public void updateRecipe(@PathVariable Integer recipeId, @RequestBody Recipe newRecipe) {
         recipeService.updateRecipe(recipeId, newRecipe);
@@ -55,6 +64,11 @@ public class RecipeController {
         recipeService.addIngredientToRecipe(recipeId, inventory, ingredientName);
     }
 
+    /**
+     * Removes the specified Ingredient from the specified Recipe
+     * @param recipeId The id of the recipe to operate on
+     * @param ingredientName The name of the Ingredient to remove
+     */
     @RequestMapping(method = RequestMethod.DELETE, value = "/{recipeId}/{ingredientName}")
     public void removeFromRecipe(@PathVariable Integer recipeId, @PathVariable String ingredientName) {
         recipeService.removeIngredientFromRecipe(recipeId, ingredientName);
