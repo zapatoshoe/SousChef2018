@@ -22,8 +22,8 @@ public class InventoryController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/{ownerId}/{ingredientName}")
-    public void addToInventory(@PathVariable Integer ownerId, @PathVariable String ingredientName, @RequestBody Inventory inventory) {
-        inventoryService.addToInventory(inventory, ingredientName, ownerId);
+    public void addToInventory(@PathVariable Integer ownerId, @PathVariable String ingredientName) {
+        inventoryService.addToInventory(ownerId, ingredientName);
     }
 
     @RequestMapping(method=RequestMethod.DELETE, value="/{ownerId}/{ingredientName}")

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import db.app.Ingredient.Ingredient;
-import org.hibernate.boot.spi.InFlightMetadataCollector;
 
 import java.io.IOException;
 

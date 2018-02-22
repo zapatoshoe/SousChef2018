@@ -6,7 +6,15 @@ import javax.persistence.*;
 public class Ingredient {
 
     /**
-     * Unique Identifier
+     * Unique ID number
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+**/
+
+    /**
+     * Unique name
      */
     @Id
     private String name;
@@ -32,6 +40,16 @@ public class Ingredient {
         this.name = name;
         this.type = type;
     }
+
+    /**
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+     **/
 
     /**
      * Gets the ingredient's name

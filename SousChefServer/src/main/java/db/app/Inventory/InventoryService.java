@@ -37,7 +37,8 @@ public class InventoryService {
         return ingredients;
     }
 
-    public void addToInventory(Inventory inventory, String ingredientName, Integer ownerId) {
+    public void addToInventory(Integer ownerId, String ingredientName) {
+        Inventory inventory = new Inventory();
         Person me = personService.getPerson(ownerId);
         inventory.setOwner(me);
         inventory.setIngredient(ingredientService.getIngredient(ingredientName));
