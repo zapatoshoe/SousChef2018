@@ -21,7 +21,8 @@ public class IngredientService {
     }
 
     public Ingredient getIngredient(String name){
-        return ingredientRepository.findOne(name);
+        List<Ingredient> list = ingredientRepository.findByName(name);
+        return list.get(0);
     }
 
     public void addIngredient(Ingredient ingredient){
@@ -29,7 +30,8 @@ public class IngredientService {
     }
 
     public void deleteIngredient(String name){
-        ingredientRepository.delete(name);
+        List<Ingredient> list = ingredientRepository.findByName(name);
+        ingredientRepository.delete(list.get(0).getId());
     }
 
     public List<Ingredient> getAllByType(IngredientType type) {
