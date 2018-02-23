@@ -14,6 +14,16 @@ public class RecipeController {
     private RecipeService recipeService;
 
 
+    @RequestMapping("/all")
+    public List<Recipe> getAllRecipes() {
+        return recipeService.getAllRecipes();
+    }
+
+    @RequestMapping("/get/{recipeId}")
+    public Recipe getRecipe(@PathVariable Integer recipeId) {
+        return recipeService.getRecipe(recipeId);
+    }
+
     /**
      * Returns all of a Person's recipes
      * @param ownerId The Person whose recipes you want
@@ -72,6 +82,11 @@ public class RecipeController {
     @RequestMapping(method = RequestMethod.DELETE, value = "/{recipeId}/{ingredientName}")
     public void removeFromRecipe(@PathVariable Integer recipeId, @PathVariable String ingredientName) {
         recipeService.removeIngredientFromRecipe(recipeId, ingredientName);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/search")
+    public List<Recipe> search(@RequestBody Request request) {
+        return recipeService.search(request);
     }
 
 }

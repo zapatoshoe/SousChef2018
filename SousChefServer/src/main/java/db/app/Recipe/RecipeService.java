@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class RecipeService {
@@ -25,8 +28,21 @@ public class RecipeService {
     private IngredientService ingredientService;
 
 
+    public List<Recipe> getAllRecipes() {
+        List<Recipe> l = new ArrayList<>();
+        for (Recipe r : recipeRepository.findAll())
+            l.add(r);
+        return l;
+    }
+
+
+    public Recipe getRecipe(Integer recipeId) {
+        return recipeRepository.findOne(recipeId);
+    }
+
     /**
      * Returns a List of all the Person's recipes
+     *
      * @param ownerId Id of the Owner of the recipes
      * @return A List of Recipes for that owner
      */
@@ -36,12 +52,13 @@ public class RecipeService {
 
     /**
      * Adds a recipe to the repository (must insert ingredients later separately)
+     *
      * @param ownerId The Owner of the recipe
-     * @param recipe The recipe to insert
+     * @param recipe  The recipe to insert
      */
     public void addRecipe(Integer ownerId, Recipe recipe) {
         Person person = personService.getPerson(ownerId);
-        if(person == null)
+        if (person == null)
             return;
         recipe.setOwner(person);    //ensure properly setting the Person field
         recipeRepository.save(recipe);
@@ -49,6 +66,7 @@ public class RecipeService {
 
     /**
      * Removes a recipe from the database
+     *
      * @param recipeId The id of the Recipe to be deleted
      */
     public void deleteRecipe(Integer recipeId) {
@@ -57,12 +75,13 @@ public class RecipeService {
 
     /**
      * Updates the information of an existing Recipe
-     * @param recipeId The Recipe to be updated
+     *
+     * @param recipeId  The Recipe to be updated
      * @param newRecipe The new Recipe data to be changed
      */
     public void updateRecipe(Integer recipeId, Recipe newRecipe) {
         Recipe old = recipeRepository.findOne(recipeId);
-        if(old == null)
+        if (old == null)
             return;
         old.setCookMins(newRecipe.getCookMins());
         old.setDescription(newRecipe.getDescription());
@@ -74,14 +93,15 @@ public class RecipeService {
 
     /**
      * Inserts an Ingredient into the Recipe
-     * @param recipeId The Recipe to add to
-     * @param inventory The skeleton of the RInventory (having only amount set)
+     *
+     * @param recipeId       The Recipe to add to
+     * @param inventory      The skeleton of the RInventory (having only amount set)
      * @param ingredientName The name of the ingredient to insert
      */
     public void addIngredientToRecipe(Integer recipeId, RInventory inventory, String ingredientName) {
         Recipe recipe = recipeRepository.findOne(recipeId);
         Ingredient i = ingredientService.getIngredient(ingredientName);
-        if(i == null)
+        if (i == null)
             return;
         inventory.setIngredient(i);       //set the ingredient properly
         inventory.setRecipe(recipe);
@@ -90,21 +110,22 @@ public class RecipeService {
 
     /**
      * Removes an Ingredient (Inventory) from a Recipe
-     * @param recipeId The Recipe to be operated on
+     *
+     * @param recipeId       The Recipe to be operated on
      * @param ingredientName The Ingredient to be removed
      */
     public void removeIngredientFromRecipe(Integer recipeId, String ingredientName) {
         Recipe recipe = recipeRepository.findOne(recipeId);
-        if(recipe == null)
+        if (recipe == null)
             return;
         List<RInventory> ingredients = recipe.getInv();
-        if(ingredients == null)
+        if (ingredients == null)
             return;
         Ingredient actual = ingredientService.getIngredient(ingredientName);
-        if(actual == null)
+        if (actual == null)
             return;
-        for(RInventory i : ingredients) {
-            if(i.getIngredient().equals(actual)) {
+        for (RInventory i : ingredients) {
+            if (i.getIngredient().equals(actual)) {
                 try {
                     //Due to Inheritance issues, a statement must be used in order to correctly delete the RInventory
                     PreparedStatement stmt = DatabaseDummyApplication.db.prepareStatement("DELETE FROM db309yt1.inventory WHERE inventory_id=?;");
@@ -118,4 +139,55 @@ public class RecipeService {
         }
     }
 
+    public List<Recipe> search(Request request) {
+        List<Recipe> valid = new ArrayList<>();     //The Recipes to be returned
+        for(Recipe r : recipeRepository.findAll())
+            valid.add(r);                           //all recipes are initially valid
+        List<Recipe> toKeep = new ArrayList<>();
+
+        /*
+        4 scenarios
+        1.) Has keyword and types
+        2.) Has keyword
+        3.) Has types
+        4.) None
+         */
+        if(request.getKeyword() != null && !request.getKeyword().isEmpty()) {       //has keyword
+            if(request.getTypes() != null && !request.getTypes().isEmpty()) {       //has keyword and types
+                for(String type : request.getTypes()) {         //Go through each type
+                    for(Recipe r : recipeRepository.findByTypeContaining(type)) {       //For each recipe matching that type, add it if has keyword
+                        if(r.getTitle().contains(request.getKeyword()))
+                            toKeep.add(r);
+                        else if(r.getDescription().contains(request.getKeyword()))
+                            toKeep.add(r);
+                    }
+                    valid.retainAll(toKeep);     //Get rid of anything not having this type
+                }
+            } else {                //doesn't have types
+                toKeep.addAll(recipeRepository.findByDescriptionContaining(request.getKeyword()));
+                toKeep.addAll(recipeRepository.findByTitleContaining(request.getKeyword()));
+                valid.retainAll(toKeep);
+            }
+        } else {    //doesn't have keyword
+            if(request.getTypes() != null && !request.getTypes().isEmpty()) {       //has types
+                for(String type : request.getTypes()) {         //Go through each type
+                    //For each recipe matching that type, add it if has keyword
+                    toKeep.addAll(recipeRepository.findByTypeContaining(type));
+                    valid.retainAll(toKeep);     //Get rid of anything not having this type
+                }
+            }
+        }
+        int minStars = request.getStarRating() == null ? 0 : request.getStarRating();
+        int maxCook = request.getCookMins() == null ? Integer.MAX_VALUE : request.getCookMins();
+        int maxPrep = request.getPrepMins() == null ? Integer.MAX_VALUE : request.getPrepMins();
+        Set<Recipe> toRemove = new HashSet<>();
+        for (Recipe r : valid) {
+            if (r.getCookMins() > maxCook)
+                toRemove.add(r);
+            else if (r.getPrepMins() > maxPrep)
+                toRemove.add(r);
+        }
+        valid.removeAll(toRemove);
+        return valid;
+    }
 }
