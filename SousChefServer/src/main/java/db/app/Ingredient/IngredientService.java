@@ -22,7 +22,7 @@ public class IngredientService {
 
     public Ingredient getIngredient(String name){
         List<Ingredient> list = ingredientRepository.findByName(name);
-        return list.get(0);
+        return list.isEmpty() ? null : list.get(0);     //should only be one ingredient with that name
     }
 
     public void addIngredient(Ingredient ingredient){

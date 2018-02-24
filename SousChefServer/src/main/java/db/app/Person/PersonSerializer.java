@@ -27,7 +27,7 @@ public class PersonSerializer extends StdSerializer<Person> {
         jgen.writeNumberField("id", person.getId());    //"id": person.getId,
         jgen.writeStringField("name", person.getName());    //"name": "person.getName()",
         jgen.writeStringField("email", person.getEmail());  //"email": "person.getEmail()",
-        jgen.writeStringField("type", person.getType());    //"type": "person.getType(),"
+        jgen.writeStringField("type", person.getType());    //"type": "person.getTypes(),"
         jgen.writeFieldName("ingredients");     //"ingredients":
         jgen.writeStartArray(); //[
         if(person.getInventory() != null) {     //if they have an inventory
@@ -35,7 +35,7 @@ public class PersonSerializer extends StdSerializer<Person> {
                 Ingredient i = item.getIngredient();
                 jgen.writeStartObject();    //{
                 jgen.writeStringField("name", i.getName());     //"name": "i.getName()",
-                jgen.writeStringField("type", i.getType().toString());  //"type": "i.getType()"
+                jgen.writeStringField("type", i.getType().toString());  //"type": "i.getTypes()"
                 jgen.writeEndObject();  //},
             }
         }

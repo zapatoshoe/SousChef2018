@@ -87,7 +87,7 @@ public class RecipeService {
         old.setDescription(newRecipe.getDescription());
         old.setPrepMins(newRecipe.getPrepMins());
         old.setTitle(newRecipe.getTitle());
-        old.setType(newRecipe.getType());
+        old.setTypes(newRecipe.getTypes());
         recipeRepository.save(old);
     }
 
@@ -139,7 +139,17 @@ public class RecipeService {
         }
     }
 
-    public List<Recipe> search(Request request) {
+    /**
+     * Returns a List of recipes that match the Search paramaters
+     * Recipes must match all, if any, types,
+     * fall under the specified number of cookMins, prepMins, and above the star rating
+     * Must also have the keyword if specified
+     *
+     * If no parameter is explicated, filter will not be applied for that parameter
+     * @param search The Search holding the filtering parameters - can have any, all, or none of the fields specified
+     * @return The valid List of Recipes
+     */
+    public List<Recipe> search(Search search) {
         List<Recipe> valid = new ArrayList<>();     //The Recipes to be returned
         for(Recipe r : recipeRepository.findAll())
             valid.add(r);                           //all recipes are initially valid
@@ -152,34 +162,34 @@ public class RecipeService {
         3.) Has types
         4.) None
          */
-        if(request.getKeyword() != null && !request.getKeyword().isEmpty()) {       //has keyword
-            if(request.getTypes() != null && !request.getTypes().isEmpty()) {       //has keyword and types
-                for(String type : request.getTypes()) {         //Go through each type
-                    for(Recipe r : recipeRepository.findByTypeContaining(type)) {       //For each recipe matching that type, add it if has keyword
-                        if(r.getTitle().contains(request.getKeyword()))
+        if(search.getKeyword() != null && !search.getKeyword().isEmpty()) {       //has keyword
+            if(search.getTypes() != null && !search.getTypes().isEmpty()) {       //has keyword and types
+                for(String type : search.getTypes()) {         //Go through each type
+                    for(Recipe r : recipeRepository.findByTypesContaining(type)) {       //For each recipe matching that type, add it if has keyword
+                        if(r.getTitle().contains(search.getKeyword()))
                             toKeep.add(r);
-                        else if(r.getDescription().contains(request.getKeyword()))
+                        else if(r.getDescription().contains(search.getKeyword()))
                             toKeep.add(r);
                     }
                     valid.retainAll(toKeep);     //Get rid of anything not having this type
                 }
             } else {                //doesn't have types
-                toKeep.addAll(recipeRepository.findByDescriptionContaining(request.getKeyword()));
-                toKeep.addAll(recipeRepository.findByTitleContaining(request.getKeyword()));
+                toKeep.addAll(recipeRepository.findByDescriptionContaining(search.getKeyword()));
+                toKeep.addAll(recipeRepository.findByTitleContaining(search.getKeyword()));
                 valid.retainAll(toKeep);
             }
         } else {    //doesn't have keyword
-            if(request.getTypes() != null && !request.getTypes().isEmpty()) {       //has types
-                for(String type : request.getTypes()) {         //Go through each type
+            if(search.getTypes() != null && !search.getTypes().isEmpty()) {       //has types
+                for(String type : search.getTypes()) {         //Go through each type
                     //For each recipe matching that type, add it if has keyword
-                    toKeep.addAll(recipeRepository.findByTypeContaining(type));
+                    toKeep.addAll(recipeRepository.findByTypesContaining(type));
                     valid.retainAll(toKeep);     //Get rid of anything not having this type
                 }
             }
         }
-        int minStars = request.getStarRating() == null ? 0 : request.getStarRating();
-        int maxCook = request.getCookMins() == null ? Integer.MAX_VALUE : request.getCookMins();
-        int maxPrep = request.getPrepMins() == null ? Integer.MAX_VALUE : request.getPrepMins();
+        int minStars = search.getStarRating() == null ? 0 : search.getStarRating();   //If no rating specified, min is 0
+        int maxCook = search.getCookMins() == null ? Integer.MAX_VALUE : search.getCookMins();    //if no max cook specified, max is max value
+        int maxPrep = search.getPrepMins() == null ? Integer.MAX_VALUE : search.getPrepMins();
         Set<Recipe> toRemove = new HashSet<>();
         for (Recipe r : valid) {
             if (r.getCookMins() > maxCook)

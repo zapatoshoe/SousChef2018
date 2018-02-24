@@ -3,7 +3,6 @@ package db.app.Recipe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.PermitAll;
 import java.util.List;
 
 @RestController
@@ -85,8 +84,8 @@ public class RecipeController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/search")
-    public List<Recipe> search(@RequestBody Request request) {
-        return recipeService.search(request);
+    public List<Recipe> search(@RequestBody Search search) {
+        return recipeService.search(search);
     }
 
 }

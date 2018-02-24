@@ -2,7 +2,7 @@ package db.app.Recipe;
 
 import java.util.List;
 
-public class Request {
+public class Search {
     /**
      * 0 - 50
      */

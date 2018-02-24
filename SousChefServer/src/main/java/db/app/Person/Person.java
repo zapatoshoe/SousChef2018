@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import db.app.Ingredient.Ingredient;
 import db.app.Inventory.Inventory;
+import db.app.ListItem.ListItem;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -66,6 +67,9 @@ public class Person {
 
 	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Inventory> inventory;
+
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<ListItem> shoppingList;
 
 	public Person() {
 		id = -1;
@@ -138,6 +142,20 @@ public class Person {
 		this.image = image;
 	}
 
+	public List<Inventory> getInventory() {
+		return inventory;
+	}
+	public void setInventory(List<Inventory> inventory) {
+		this.inventory = inventory;
+	}
+
+	public List<ListItem> getShoppingList() {
+		return shoppingList;
+	}
+	public void setShoppingList(List<ListItem> shoppingList) {
+		this.shoppingList = shoppingList;
+	}
+
 	/**
 	 * Converts the Blob from the SQL db to a Base64 encoded string for serialization
 	 */
@@ -169,13 +187,6 @@ public class Person {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public List<Inventory> getInventory() {
-		return inventory;
-	}
-	public void setIngredients(List<Inventory> inventory) {
-		this.inventory = inventory;
 	}
 
 }
