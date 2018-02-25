@@ -28,7 +28,7 @@ public class RecipeController {
      * @param ownerId The Person whose recipes you want
      * @return A List of recipes belonging to that owner
      */
-    @RequestMapping("/{ownerId}")
+    @RequestMapping("/owner/{ownerId}")
     public List<Recipe> getPersonsRecipes(@PathVariable Integer ownerId) {
         return recipeService.getPersonRecipes(ownerId);
     }
@@ -38,7 +38,7 @@ public class RecipeController {
      * @param recipe The recipe to be added to the database
      * Recipe assumed to have these fields set already - Title, Description, CookMins, PrepMins, Type, ownerId
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/{ownerId}/add")
+    @RequestMapping(method = RequestMethod.POST, value = "/{ownerId}")
     public void addRecipe(@PathVariable Integer ownerId, @RequestBody Recipe recipe) {
         recipeService.addRecipe(ownerId, recipe);
     }

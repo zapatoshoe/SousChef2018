@@ -1,7 +1,5 @@
 package db.app.Ingredient;
 
-import db.app.Inventory.Inventory;
-import db.app.Person.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

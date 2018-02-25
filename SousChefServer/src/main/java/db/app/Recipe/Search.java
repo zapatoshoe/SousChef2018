@@ -20,7 +20,7 @@ public class Search {
     /**
      * List of keyword
      */
-    private String keyword;
+    private List<String> keywords;
 
     public Integer getStarRating() {
         return starRating;
@@ -54,11 +54,11 @@ public class Search {
         this.types = types;
     }
 
-    public String getKeyword() {
-        return keyword;
+    public List<String> getKeywords() {
+        return keywords;
     }
 
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
+    public void setKeywords(List<String> keywords) {
+        this.keywords = keywords;
     }
 }

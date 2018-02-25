@@ -1,7 +1,6 @@
 package db.app.ListItem;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.sun.xml.internal.ws.developer.Serialization;
 import db.app.Ingredient.Ingredient;
 import db.app.Person.Person;
 

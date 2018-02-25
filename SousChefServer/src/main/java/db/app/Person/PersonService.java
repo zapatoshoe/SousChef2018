@@ -1,17 +1,12 @@
 package db.app.Person;
 
-import java.io.*;
-import java.net.URLDecoder;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
-
-import db.app.DatabaseDummyApplication;
+import db.app.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 @Service
@@ -47,7 +42,7 @@ public class PersonService {
 	public void addPerson(Person person) {
 		if(!personRepository.findByEmail(person.getEmail()).isEmpty())	//if the email is already in use, return a null person
 			return;
-		person.convertStringToBlob();
+		Utility.convertStringToBlob(person);
 		person.setCreated(new Date());
 		personRepository.save(person);
 	}
@@ -59,7 +54,7 @@ public class PersonService {
 	 */
 	public void updatePerson(Person person, Integer id) {
 		person.setId(id);
-		person.convertStringToBlob();
+		Utility.convertStringToBlob(person);
 		personRepository.save(person);	//same as add but repository knows to update existing rows
 	}
 

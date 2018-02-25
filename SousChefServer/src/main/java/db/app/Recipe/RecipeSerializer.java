@@ -4,8 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import db.app.Ingredient.Ingredient;
-
-import java.io.IOException;
+import db.app.Utility;
 
 public class RecipeSerializer extends StdSerializer<Recipe> {
 
@@ -20,7 +19,7 @@ public class RecipeSerializer extends StdSerializer<Recipe> {
     @Override
     public void serialize(Recipe recipe, JsonGenerator jgen, SerializerProvider serializerProvider) {
         try {
-            recipe.prepForSerialization();
+            Utility.prepForSerialization(recipe);
             jgen.writeStartObject();                                                    //{
             jgen.writeNumberField("id", recipe.getId());                        //"id": "recipe.getId()",
             jgen.writeStringField("title", recipe.getTitle());                  //"title": "recipe.getTitle()",
@@ -28,7 +27,7 @@ public class RecipeSerializer extends StdSerializer<Recipe> {
             jgen.writeNumberField("cookMins", recipe.getCookMins());            //"cookMins": "recipe.getCookMins()",
             jgen.writeNumberField("prepMins", recipe.getPrepMins());            //"prepMins": "recipe.getPrepMins()",
             jgen.writeNumberField("ownerId", recipe.getOwner().getId());        //"ownerId": recipe.getOwner().getId(),
-            jgen.writeStringField("type", recipe.getTypes());                    //"type": "recipe.getTypes()",
+            jgen.writeStringField("types", recipe.getTypes());                    //"types": "recipe.getTypes()",
             jgen.writeFieldName("ingredients");                                        //"ingredients": [
             jgen.writeStartArray();
             if (recipe.getInv() != null) {
@@ -43,6 +42,7 @@ public class RecipeSerializer extends StdSerializer<Recipe> {
                 }
             }
             jgen.writeEndArray();                                                         //],
+            jgen.writeStringField("createdDate", recipe.getCreatedDate().toString());
             jgen.writeStringField("image", recipe.getImage());                  //"image": "recipe.getImage()"
             jgen.writeEndObject();                                                      //}
         } catch(Exception e) {

@@ -1,29 +1,18 @@
 package db.app.Person;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.Serializers;
-import db.app.Ingredient.Ingredient;
+import db.app.ImageAndPicture;
 import db.app.Inventory.Inventory;
 import db.app.ListItem.ListItem;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.persistence.*;
-import javax.sql.rowset.serial.SerialBlob;
-import javax.sql.rowset.serial.SerialException;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.sql.Blob;
-import java.sql.SQLException;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @JsonSerialize(using = PersonSerializer.class)
-public class Person {
+public class Person implements ImageAndPicture{
 
 	/**
 	 * Unique identifier
@@ -128,17 +117,17 @@ public class Person {
 		this.lastLogin = lastLogin;
 	}
 
-	private Blob getPicture() {
+	public Blob getPicture() {
 		return picture;
 	}
-	private void setPicture(Blob picture) {
+	public void setPicture(Blob picture) {
 		this.picture = picture;
 	}
 
 	public String getImage() {
 		return image;
 	}
-	private void setImage(String image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 
@@ -154,39 +143,6 @@ public class Person {
 	}
 	public void setShoppingList(List<ListItem> shoppingList) {
 		this.shoppingList = shoppingList;
-	}
-
-	/**
-	 * Converts the Blob from the SQL db to a Base64 encoded string for serialization
-	 */
-	public void prepForSerialization() {
-		try {
-			if(this.getPicture() == null || this.getPicture().length() < 4) {
-				image = null;
-				return;
-			}
-			int len;
-			len = (int) this.getPicture().length();
-			byte[] bytes = this.getPicture().getBytes(1, len);
-			this.setImage(Base64.getEncoder().encodeToString(bytes));	//for sending over JSON
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Converts what is currently a String encoded in Base64 to a Blob for storage in SQL db
-	 */
-	public void convertStringToBlob() {
-		if(this.getImage() == null)
-			return;
-		try {
-			byte[] bytes = Base64.getDecoder().decode(this.getImage());
-			Blob b = new SerialBlob(bytes);
-			this.setPicture(b);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 
 }

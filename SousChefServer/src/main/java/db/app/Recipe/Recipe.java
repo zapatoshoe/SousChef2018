@@ -1,19 +1,17 @@
 package db.app.Recipe;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import db.app.ImageAndPicture;
 import db.app.Person.Person;
 
 import javax.persistence.*;
-import javax.sql.rowset.serial.SerialBlob;
 import java.sql.Blob;
-import java.sql.SQLException;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @JsonSerialize(using = RecipeSerializer.class)
-public class Recipe {
+public class Recipe implements ImageAndPicture {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -96,6 +94,13 @@ public class Recipe {
         this.types = types;
     }
 
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
     public Blob getPicture() {
         return picture;
     }
@@ -115,38 +120,5 @@ public class Recipe {
     }
     public void setInv(List<RInventory> inv) {
         this.inv = inv;
-    }
-
-    /**
-     * Converts the Blob from the SQL db to a Base64 encoded string for serialization
-     */
-    public void prepForSerialization() {
-        try {
-            if(this.getPicture() == null || this.getPicture().length() < 4) {
-                image = null;
-                return;
-            }
-            int len;
-            len = (int) this.getPicture().length();
-            byte[] bytes = this.getPicture().getBytes(1, len);
-            this.setImage(Base64.getEncoder().encodeToString(bytes));	//for sending over JSON
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Converts what is currently a String encoded in Base64 to a Blob for storage in SQL db
-     */
-    public void convertStringToBlob() {
-        if(this.getImage() == null)
-            return;
-        try {
-            byte[] bytes = Base64.getDecoder().decode(this.getImage());
-            Blob b = new SerialBlob(bytes);
-            this.setPicture(b);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

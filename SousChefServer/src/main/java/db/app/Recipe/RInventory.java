@@ -1,9 +1,6 @@
 package db.app.Recipe;
 
 import db.app.Ingredient.Ingredient;
-import db.app.Inventory.Inventory;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 

@@ -1,26 +1,9 @@
 package db.app.Person;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.sql.Blob;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Base64;
-import java.util.List;
-
-import db.app.DatabaseDummyApplication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
+import java.util.List;
 
 /**
  * Handles any request at the url host/souschef/persons
