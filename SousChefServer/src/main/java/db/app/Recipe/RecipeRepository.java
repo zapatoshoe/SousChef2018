@@ -7,7 +7,11 @@ import java.util.List;
 
 public interface RecipeRepository extends CrudRepository<Recipe, Integer>{
 
-    public List<Recipe> findByOwner(Person person);
+    List<Recipe> findByOwner(Person person);
 
-    public List<Recipe> findByDescriptionContaining(String word);
+    List<Recipe> findByDescriptionContaining(String word);
+
+    List<Recipe> findByTypesContaining(String word);
+
+    List<Recipe> findByTitleContaining(String keyword);
 }

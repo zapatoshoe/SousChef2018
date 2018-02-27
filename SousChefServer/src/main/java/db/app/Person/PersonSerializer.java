@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import db.app.Ingredient.Ingredient;
 import db.app.Inventory.Inventory;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import db.app.Utility;
 
 import java.io.IOException;
 
@@ -22,12 +21,12 @@ public class PersonSerializer extends StdSerializer<Person> {
 
     @Override
     public void serialize(Person person, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-        person.prepForSerialization();  //Converts picture from Blob to image as String
+        Utility.prepForSerialization(person);  //Converts picture from Blob to image as String
         jgen.writeStartObject();    //{
         jgen.writeNumberField("id", person.getId());    //"id": person.getId,
         jgen.writeStringField("name", person.getName());    //"name": "person.getName()",
         jgen.writeStringField("email", person.getEmail());  //"email": "person.getEmail()",
-        jgen.writeStringField("type", person.getType());    //"type": "person.getType(),"
+        jgen.writeStringField("type", person.getType());    //"type": "person.getTypes(),"
         jgen.writeFieldName("ingredients");     //"ingredients":
         jgen.writeStartArray(); //[
         if(person.getInventory() != null) {     //if they have an inventory
@@ -35,7 +34,7 @@ public class PersonSerializer extends StdSerializer<Person> {
                 Ingredient i = item.getIngredient();
                 jgen.writeStartObject();    //{
                 jgen.writeStringField("name", i.getName());     //"name": "i.getName()",
-                jgen.writeStringField("type", i.getType().toString());  //"type": "i.getType()"
+                jgen.writeStringField("type", i.getType().toString());  //"type": "i.getTypes()"
                 jgen.writeEndObject();  //},
             }
         }

@@ -1,11 +1,9 @@
 package db.app.Inventory;
 
 import db.app.Ingredient.Ingredient;
-import db.app.Ingredient.IngredientRepository;
 import db.app.Ingredient.IngredientService;
 import db.app.Person.Person;
 import db.app.Person.PersonService;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

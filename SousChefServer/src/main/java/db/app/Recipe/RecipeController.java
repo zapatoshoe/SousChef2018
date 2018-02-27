@@ -3,7 +3,6 @@ package db.app.Recipe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.PermitAll;
 import java.util.List;
 
 @RestController
@@ -14,12 +13,22 @@ public class RecipeController {
     private RecipeService recipeService;
 
 
+    @RequestMapping("/all")
+    public List<Recipe> getAllRecipes() {
+        return recipeService.getAllRecipes();
+    }
+
+    @RequestMapping("/get/{recipeId}")
+    public Recipe getRecipe(@PathVariable Integer recipeId) {
+        return recipeService.getRecipe(recipeId);
+    }
+
     /**
      * Returns all of a Person's recipes
      * @param ownerId The Person whose recipes you want
      * @return A List of recipes belonging to that owner
      */
-    @RequestMapping("/{ownerId}")
+    @RequestMapping("/owner/{ownerId}")
     public List<Recipe> getPersonsRecipes(@PathVariable Integer ownerId) {
         return recipeService.getPersonRecipes(ownerId);
     }
@@ -29,7 +38,7 @@ public class RecipeController {
      * @param recipe The recipe to be added to the database
      * Recipe assumed to have these fields set already - Title, Description, CookMins, PrepMins, Type, ownerId
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/{ownerId}/add")
+    @RequestMapping(method = RequestMethod.POST, value = "/{ownerId}")
     public void addRecipe(@PathVariable Integer ownerId, @RequestBody Recipe recipe) {
         recipeService.addRecipe(ownerId, recipe);
     }
@@ -72,6 +81,11 @@ public class RecipeController {
     @RequestMapping(method = RequestMethod.DELETE, value = "/{recipeId}/{ingredientName}")
     public void removeFromRecipe(@PathVariable Integer recipeId, @PathVariable String ingredientName) {
         recipeService.removeIngredientFromRecipe(recipeId, ingredientName);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/search")
+    public List<Recipe> search(@RequestBody Search search) {
+        return recipeService.search(search);
     }
 
 }

@@ -1,7 +1,5 @@
 package db.app.Ingredient;
 
-import db.app.Inventory.Inventory;
-import db.app.Person.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +20,7 @@ public class IngredientService {
 
     public Ingredient getIngredient(String name){
         List<Ingredient> list = ingredientRepository.findByName(name);
-        return list.get(0);
+        return list.isEmpty() ? null : list.get(0);     //should only be one ingredient with that name
     }
 
     public void addIngredient(Ingredient ingredient){
