@@ -15,16 +15,25 @@ public class RecipeSteps {
     private Integer id;
 
     /**
-     *
+     * Recipe this step belongs to
      */
     @ManyToOne
     private Recipe recipe;
 
+    /**
+     * The ordering of this step
+     */
     private Integer stepNumber;
 
+    /**
+     * Information/instruction for this step
+     */
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    /**
+     * How long this step will take to perform
+     */
     private Integer time;
 
     public RecipeSteps(){
