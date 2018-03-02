@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import db.app.ingredient.Ingredient;
+import db.app.recipeSteps.RecipeSteps;
+import db.app.review.Review;
 import db.app.util.Helpers;
 
 public class RecipeSerializer extends StdSerializer<Recipe> {
@@ -24,10 +26,11 @@ public class RecipeSerializer extends StdSerializer<Recipe> {
             jgen.writeNumberField("id", recipe.getId());                        //"id": "recipe.getId()",
             jgen.writeStringField("title", recipe.getTitle());                  //"title": "recipe.getTitle()",
             jgen.writeStringField("description", recipe.getDescription());      //"description": recipe.getDescription()",
-            jgen.writeNumberField("cookMins", recipe.getCookMins());            //"cookMins": "recipe.getCookMins()",
-            jgen.writeNumberField("prepMins", recipe.getPrepMins());            //"prepMins": "recipe.getPrepMins()",
+            jgen.writeNumberField("cookSecs", recipe.getCookSecs());            //"cookMins": "recipe.getCookMins()",
+            jgen.writeNumberField("prepSecs", recipe.getPrepSecs());            //"prepMins": "recipe.getPrepMins()",
             jgen.writeNumberField("ownerId", recipe.getOwner().getId());        //"ownerId": recipe.getOwner().getId(),
             jgen.writeStringField("types", recipe.getTypes());                    //"types": "recipe.getTypes()",
+            jgen.writeNumberField("averageRating", recipe.getAverageRating());
             jgen.writeFieldName("ingredients");                                        //"ingredients": [
             jgen.writeStartArray();
             if (recipe.getInv() != null) {
@@ -42,6 +45,27 @@ public class RecipeSerializer extends StdSerializer<Recipe> {
                 }
             }
             jgen.writeEndArray();                                                         //],
+            if(recipe.isVerbose()) {
+                jgen.writeFieldName("steps");
+                jgen.writeStartArray();
+                for (RecipeSteps step : recipe.getSteps()) {
+                    jgen.writeStartObject();
+                    jgen.writeNumberField("id", step.getId());
+                    jgen.writeNumberField("stepNumber", step.getStepNumber());
+                    jgen.writeNumberField("time", step.getTime());
+                    jgen.writeStringField("description", step.getDescription());
+                    jgen.writeEndObject();                                                  //},
+                }
+                jgen.writeEndArray();
+//                for (Review review : recipe.getReviews()) {       //TODO
+//                    jgen.writeStartObject();
+//                    jgen.writeNumberField("id", review.getId());
+//                    jgen.writeNumberField("stepNumber", step.getStepNumber());
+//                    jgen.writeNumberField("time", step.getTime());
+//                    jgen.writeStringField("description", step.getDescription());
+//                    jgen.writeEndObject();                                                  //},
+//                }
+            }
             jgen.writeStringField("createdDate", recipe.getCreatedDate().toString());
             jgen.writeStringField("image", recipe.getImage());                  //"image": "recipe.getImage()"
             jgen.writeEndObject();                                                      //}

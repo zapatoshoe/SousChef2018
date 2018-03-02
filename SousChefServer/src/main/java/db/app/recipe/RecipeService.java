@@ -28,14 +28,18 @@ public class RecipeService {
 
     public List<Recipe> getAllRecipes() {
         List<Recipe> l = new ArrayList<>();
-        for (Recipe r : recipeRepository.findAll())
+        for (Recipe r : recipeRepository.findAll()) {
+            r.setVerbose(false);
             l.add(r);
+        }
         return l;
     }
 
 
     public Recipe getRecipe(Integer recipeId) {
-        return recipeRepository.findOne(recipeId);
+        Recipe ret = recipeRepository.findOne(recipeId);
+        ret.setVerbose(true);
+        return ret;
     }
 
     /**
@@ -45,7 +49,10 @@ public class RecipeService {
      * @return A List of Recipes for that owner
      */
     public List<Recipe> getPersonRecipes(Integer ownerId) {
-        return recipeRepository.findByOwner(personService.getPerson(ownerId));
+        List<Recipe> ret = recipeRepository.findByOwner(personService.getPerson(ownerId));
+        for(Recipe r : ret)
+            r.setVerbose(false);
+        return ret;
     }
 
     /**
@@ -82,9 +89,9 @@ public class RecipeService {
         Recipe old = recipeRepository.findOne(recipeId);
         if (old == null)
             return;
-        old.setCookMins(newRecipe.getCookMins());
+        old.setCookSecs(newRecipe.getCookSecs());
         old.setDescription(newRecipe.getDescription());
-        old.setPrepMins(newRecipe.getPrepMins());
+        old.setPrepSecs(newRecipe.getPrepSecs());
         old.setTitle(newRecipe.getTitle());
         old.setTypes(newRecipe.getTypes());
         recipeRepository.save(old);
@@ -150,22 +157,36 @@ public class RecipeService {
      */
     public List<Recipe> search(final Search search) {
         List<Recipe> valid = new ArrayList<>();     //The Recipes to be returned
-        for(Recipe r : recipeRepository.findAll())
+        for(Recipe r : recipeRepository.findAll()) {
+            r.setVerbose(false);
             valid.add(r);                           //all recipes are initially valid
+        }
         filterKeywordsAndTypes(search, valid);
         int minStars = search.getStarRating() == null ? 0 : search.getStarRating();   //If no rating specified, min is 0
-        int maxCook = search.getCookMins() == null ? Integer.MAX_VALUE : search.getCookMins();    //if no max cook specified, max is max value
-        int maxPrep = search.getPrepMins() == null ? Integer.MAX_VALUE : search.getPrepMins();
+        int maxCook = search.getCookSecs() == null ? Integer.MAX_VALUE : search.getCookSecs();    //if no max cook specified, max is max value
+        int maxPrep = search.getPrepSecs() == null ? Integer.MAX_VALUE : search.getPrepSecs();
         Set<Recipe> toRemove = new HashSet<>();         //must use other Set to avoid removing elements during a loop
         for (Recipe r : valid) {
-            if (r.getCookMins() > maxCook)
+            if (r.getCookSecs() > maxCook)
                 toRemove.add(r);
-            else if (r.getPrepMins() > maxPrep)
+            else if (r.getPrepSecs() > maxPrep)
                 toRemove.add(r);
 //            else if (r.getStarRating() < minStars)
 //                toRemove.add(r);
         }
         valid.removeAll(toRemove);
+        //Sort by star rating then total time
+        valid.sort((o1, o2) -> {
+            if(o1.getAverageRating() > o2.getAverageRating())
+                return -1;
+            else if(o1.getAverageRating() < o2.getAverageRating())
+                return 1;
+            else {
+                int time1 = o1.getCookSecs() + o1.getPrepSecs();
+                int time2 = o1.getCookSecs() + o2.getPrepSecs();
+                return time1 > time2 ? 1 : -1;
+            }
+        });
         return valid;
     }
 

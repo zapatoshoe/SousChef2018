@@ -1,6 +1,7 @@
 package db.app.recipe;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import db.app.review.Review;
 import db.app.util.ImageAndPicture;
 import db.app.person.Person;
 import db.app.recipeSteps.RecipeSteps;
@@ -25,11 +26,13 @@ public class Recipe implements ImageAndPicture {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    private Integer prepMins;
+    private Integer prepSecs;
 
-    private Integer cookMins;
+    private Integer cookSecs;
 
-    private String types;    //TODO
+    private Float averageRating;
+
+    private String types;
 
     private Date createdDate;
 
@@ -38,13 +41,16 @@ public class Recipe implements ImageAndPicture {
     @Transient
     private String image;
 
+    @Transient
+    private boolean verbose;
+
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RInventory> inv;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RecipeSteps> steps;
 //    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<review> reviews; //TODO
+//    private List<Review> reviews;
 
     public Integer getId() {
         return id;
@@ -74,18 +80,25 @@ public class Recipe implements ImageAndPicture {
         this.description = description;
     }
 
-    public Integer getPrepMins() {
-        return prepMins;
+    public Integer getPrepSecs() {
+        return prepSecs;
     }
-    public void setPrepMins(Integer prepMins) {
-        this.prepMins = prepMins;
+    public void setPrepSecs(Integer prepMins) {
+        this.prepSecs = prepMins;
     }
 
-    public Integer getCookMins() {
-        return cookMins;
+    public Integer getCookSecs() {
+        return cookSecs;
     }
-    public void setCookMins(Integer cookMins) {
-        this.cookMins = cookMins;
+    public void setCookSecs(Integer cookMins) {
+        this.cookSecs = cookMins;
+    }
+
+    public Float getAverageRating() {
+        return averageRating;
+    }
+    public void setAverageRating(Float averageRating) {
+        this.averageRating = averageRating;
     }
 
     public String getTypes() {
@@ -116,10 +129,31 @@ public class Recipe implements ImageAndPicture {
         this.image = image;
     }
 
+    public boolean isVerbose() {
+        return verbose;
+    }
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
+    }
+
     public List<RInventory> getInv() {
         return inv;
     }
     public void setInv(List<RInventory> inv) {
         this.inv = inv;
     }
+
+    public List<RecipeSteps> getSteps() {
+        return steps;
+    }
+    public void setSteps(List<RecipeSteps> steps) {
+        this.steps = steps;
+    }
+
+//    public List<Review> getReviews() {
+//        return reviews;
+//    }
+//    public void setReviews(List<Review> reviews) {
+//        this.reviews = reviews;
+//    }
 }

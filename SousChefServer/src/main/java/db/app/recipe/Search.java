@@ -8,9 +8,9 @@ public class Search {
      */
     private Integer starRating;
 
-    private Integer cookMins;
+    private Integer cookSecs;
 
-    private Integer prepMins;
+    private Integer prepSecs;
 
     /**
      * List of all the desired types
@@ -30,20 +30,20 @@ public class Search {
         this.starRating = starRating;
     }
 
-    public Integer getCookMins() {
-        return cookMins;
+    public Integer getCookSecs() {
+        return cookSecs;
     }
 
-    public void setCookMins(Integer cookMins) {
-        this.cookMins = cookMins;
+    public void setCookSecs(Integer cookSecs) {
+        this.cookSecs = cookSecs;
     }
 
-    public Integer getPrepMins() {
-        return prepMins;
+    public Integer getPrepSecs() {
+        return prepSecs;
     }
 
-    public void setPrepMins(Integer prepMins) {
-        this.prepMins = prepMins;
+    public void setPrepSecs(Integer prepSecs) {
+        this.prepSecs = prepSecs;
     }
 
     public List<String> getTypes() {
