@@ -34,6 +34,7 @@ public class ListItemSerializer extends StdSerializer<ListItem> {
             jgen.writeEndObject();
         } else
             jgen.writeNull();
+        jgen.writeNumberField("orderNumber", listItem.getOrderNumber());
         jgen.writeBooleanField("checked", listItem.getChecked());
         jgen.writeEndObject();
     }

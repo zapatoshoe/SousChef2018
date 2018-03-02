@@ -20,7 +20,9 @@ public class ListItemService {
     private IngredientService ingredientService;
 
     public List<ListItem> getUserList(Integer ownerId) {
-        return listItemRepository.findByOwnerId(ownerId);
+        List<ListItem> ret = listItemRepository.findByOwnerId(ownerId);
+        ret.sort(ListItem.ListItemComparator);
+        return ret;
     }
 
     public void addToUserList(Integer ownerId, ListItem item) {
@@ -33,11 +35,12 @@ public class ListItemService {
         listItemRepository.save(item);
     }
 
-    public void updateListItem(Integer itemId, ListItem item) {
+    public void updateListItem(Integer itemId, ListItem newItem) {
         ListItem i = listItemRepository.findOne(itemId);
-        i.setChecked(item.getChecked());
-        i.setEntry(item.getEntry());
-        Ingredient ingredient = ingredientService.getIngredient(item.getEntry());
+        i.setChecked(newItem.getChecked());
+        i.setEntry(newItem.getEntry());
+        i.setOrderNumber(newItem.getOrderNumber());
+        Ingredient ingredient = ingredientService.getIngredient(newItem.getEntry());
         i.setIngredient(ingredient);
         listItemRepository.save(i);
     }
