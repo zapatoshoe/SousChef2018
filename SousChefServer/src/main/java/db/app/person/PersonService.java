@@ -40,7 +40,7 @@ public class PersonService {
 	 * @param person The person to add
 	 */
 	public void addPerson(Person person) {
-		if(!personRepository.findByEmail(person.getEmail()).isEmpty())	//if the email is already in use, return a null person
+        if (!personRepository.findByEmail(person.getEmail()).isEmpty())    //if the email is already in use, return
 			return;
 		Helpers.convertStringToBlob(person);
 		person.setCreated(new Date());

@@ -6,7 +6,6 @@ import db.app.person.Person;
 
 import javax.persistence.*;
 import java.util.Comparator;
-import java.util.List;
 
 @Entity
 @JsonSerialize(using = ListItemSerializer.class)
@@ -16,7 +15,7 @@ public class ListItem implements Comparable<ListItem> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Person owner;
 
     private String entry;

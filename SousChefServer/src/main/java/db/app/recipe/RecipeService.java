@@ -1,10 +1,10 @@
 package db.app.recipe;
 
+import db.app.SousChefServer;
 import db.app.ingredient.Ingredient;
 import db.app.ingredient.IngredientService;
 import db.app.person.Person;
 import db.app.person.PersonService;
-import db.app.SousChefServer;
 import db.app.util.Helpers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,11 @@ public class RecipeService {
     @Autowired
     private IngredientService ingredientService;
 
-
+    /**
+     * Returns every Recipe in the database
+     *
+     * @return Every Recipe in the database
+     */
     public List<Recipe> getAllRecipes() {
         List<Recipe> l = new ArrayList<>();
         for (Recipe r : recipeRepository.findAll()) {
@@ -36,8 +40,15 @@ public class RecipeService {
     }
 
 
+    /**
+     * Returns the requested recipe - if it exists - and sets it to be verbose
+     * @param recipeId The id for the Recipe desired
+     * @return The specified Recipe or null
+     */
     public Recipe getRecipe(Integer recipeId) {
         Recipe ret = recipeRepository.findOne(recipeId);
+        if (ret == null)
+            return null;
         ret.setVerbose(true);
         return ret;
     }
@@ -50,7 +61,7 @@ public class RecipeService {
      */
     public List<Recipe> getPersonRecipes(Integer ownerId) {
         List<Recipe> ret = recipeRepository.findByOwner(personService.getPerson(ownerId));
-        for(Recipe r : ret)
+        for (Recipe r : ret)
             r.setVerbose(false);
         return ret;
     }
@@ -150,19 +161,20 @@ public class RecipeService {
      * Recipes must match all, if any, types,
      * fall under the specified number of cookMins, prepMins, and above the star rating
      * Must also have the keyword if specified
-     *
+     * <p>
      * If no parameter is explicated, filter will not be applied for that parameter
+     *
      * @param search The Search holding the filtering parameters - can have any, all, or none of the fields specified
      * @return The valid List of Recipes
      */
     public List<Recipe> search(final Search search) {
         List<Recipe> valid = new ArrayList<>();     //The Recipes to be returned
-        for(Recipe r : recipeRepository.findAll()) {
+        for (Recipe r : recipeRepository.findAll()) {
             r.setVerbose(false);
             valid.add(r);                           //all recipes are initially valid
         }
         filterKeywordsAndTypes(search, valid);
-        int minStars = search.getStarRating() == null ? 0 : search.getStarRating();   //If no rating specified, min is 0
+        float minStars = search.getStarRating() == null ? 0 : search.getStarRating();   //If no rating specified, min is 0
         int maxCook = search.getCookSecs() == null ? Integer.MAX_VALUE : search.getCookSecs();    //if no max cook specified, max is max value
         int maxPrep = search.getPrepSecs() == null ? Integer.MAX_VALUE : search.getPrepSecs();
         Set<Recipe> toRemove = new HashSet<>();         //must use other Set to avoid removing elements during a loop
@@ -176,24 +188,15 @@ public class RecipeService {
         }
         valid.removeAll(toRemove);
         //Sort by star rating then total time
-        valid.sort((o1, o2) -> {
-            if(o1.getAverageRating() > o2.getAverageRating())
-                return -1;
-            else if(o1.getAverageRating() < o2.getAverageRating())
-                return 1;
-            else {
-                int time1 = o1.getCookSecs() + o1.getPrepSecs();
-                int time2 = o1.getCookSecs() + o2.getPrepSecs();
-                return time1 > time2 ? 1 : -1;
-            }
-        });
+        valid.sort(Recipe.RecipeComparator);
         return valid;
     }
 
     /**
      * Removes Recipes from valid that do not match the keywords and types, if specified, in search
+     *
      * @param search The Search containing the types and keywords
-     * @param valid The original list of valid Recipes
+     * @param valid  The original list of valid Recipes to be modified
      */
     private void filterKeywordsAndTypes(final Search search, List<Recipe> valid) {
         List<Recipe> toKeep = new ArrayList<>();
@@ -204,14 +207,14 @@ public class RecipeService {
         3.) Has types
         4.) None
          */
-        if(search.getKeywords() != null && !search.getKeywords().isEmpty()) {       //has keyword
-            if(search.getTypes() != null && !search.getTypes().isEmpty()) {       //has keyword and types
-                for(String type : search.getTypes()) {         //Go through each type
-                    for(Recipe r : recipeRepository.findByTypesContaining(type)) {       //For each recipe matching that type, add it if has the keywords
+        if (search.getKeywords() != null && !search.getKeywords().isEmpty()) {       //has keyword
+            if (search.getTypes() != null && !search.getTypes().isEmpty()) {       //has keyword and types
+                for (String type : search.getTypes()) {         //Go through each type
+                    for (Recipe r : recipeRepository.findByTypesContaining(type)) {       //For each recipe matching that type, add it if has the keywords
                         toKeep.add(r);
-                        for(String s : search.getKeywords()) {
+                        for (String s : search.getKeywords()) {
                             //if it is missing any of the keywords, remove it
-                            if(!(Helpers.containsIgnoreCase(r.getTitle(), s)|| Helpers.containsIgnoreCase(r.getDescription(), s))) {
+                            if (!(Helpers.containsIgnoreCase(r.getTitle(), s) || Helpers.containsIgnoreCase(r.getDescription(), s))) {
                                 toKeep.remove(r);
                                 break;
                             }
@@ -220,11 +223,11 @@ public class RecipeService {
                     valid.retainAll(toKeep);     //Get rid of anything not having this type
                 }
             } else {                //doesn't have types
-                for(Recipe r : valid) {
+                for (Recipe r : valid) {
                     toKeep.add(r);
-                    for(String s : search.getKeywords()) {
+                    for (String s : search.getKeywords()) {
                         //if it is missing any of the keywords, remove it
-                        if(!(Helpers.containsIgnoreCase(r.getTitle(), s)|| Helpers.containsIgnoreCase(r.getDescription(), s))) {
+                        if (!(Helpers.containsIgnoreCase(r.getTitle(), s) || Helpers.containsIgnoreCase(r.getDescription(), s))) {
                             toKeep.remove(r);
                             break;
                         }
@@ -233,8 +236,8 @@ public class RecipeService {
                 valid.retainAll(toKeep);
             }
         } else {    //doesn't have keywords
-            if(search.getTypes() != null && !search.getTypes().isEmpty()) {       //has types
-                for(String type : search.getTypes()) {         //Go through each type
+            if (search.getTypes() != null && !search.getTypes().isEmpty()) {       //has types
+                for (String type : search.getTypes()) {         //Go through each type
                     //For each recipe matching that type, add it if has keyword
                     toKeep.addAll(recipeRepository.findByTypesContaining(type));
                     valid.retainAll(toKeep);     //Get rid of anything not having this type

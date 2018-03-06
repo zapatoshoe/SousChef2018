@@ -3,10 +3,7 @@ package db.app.recipe;
 import java.util.List;
 
 public class Search {
-    /**
-     * 0 - 50
-     */
-    private Integer starRating;
+    private Float starRating;
 
     private Integer cookSecs;
 
@@ -22,11 +19,16 @@ public class Search {
      */
     private List<String> keywords;
 
-    public Integer getStarRating() {
+    public Float getStarRating() {
         return starRating;
     }
 
-    public void setStarRating(Integer starRating) {
+    /**
+     * The minimum rating a Recipe can have to be valid
+     *
+     * @param starRating
+     */
+    public void setStarRating(Float starRating) {
         this.starRating = starRating;
     }
 
@@ -34,6 +36,11 @@ public class Search {
         return cookSecs;
     }
 
+    /**
+     * The maximum amount of cook time a Recipe can have in seconds
+     * Range: 0-Integer.MAX_VALUE
+     * @param cookSecs
+     */
     public void setCookSecs(Integer cookSecs) {
         this.cookSecs = cookSecs;
     }
@@ -42,6 +49,11 @@ public class Search {
         return prepSecs;
     }
 
+    /**
+     * The maximum amount of prep time a Recipe can have in seconds
+     * Range: 0-Integer.MAX_VALUE
+     * @param prepSecs
+     */
     public void setPrepSecs(Integer prepSecs) {
         this.prepSecs = prepSecs;
     }
@@ -50,6 +62,11 @@ public class Search {
         return types;
     }
 
+    /**
+     * The List of types a Recipe must have
+     * Can be empty
+     * @param types
+     */
     public void setTypes(List<String> types) {
         this.types = types;
     }
@@ -58,6 +75,11 @@ public class Search {
         return keywords;
     }
 
+    /**
+     * The List of keywords a Recipe must have in either title or description
+     * Can be empty
+     * @param keywords
+     */
     public void setKeywords(List<String> keywords) {
         this.keywords = keywords;
     }

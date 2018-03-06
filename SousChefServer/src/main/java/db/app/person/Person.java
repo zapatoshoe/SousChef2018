@@ -1,9 +1,11 @@
 package db.app.person;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import db.app.util.ImageAndPicture;
 import db.app.inventory.Inventory;
 import db.app.listItem.ListItem;
+import db.app.recipe.Recipe;
+import db.app.recipeFavorite.FRecipe;
+import db.app.util.ImageAndPicture;
 
 import javax.persistence.*;
 import java.sql.Blob;
@@ -54,11 +56,22 @@ public class Person implements ImageAndPicture{
 	@Transient
 	private String image;
 
-	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<Inventory> inventory;
 
-	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<ListItem> shoppingList;
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Recipe> recipes;
+
+    private Float averageRating;
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<FRecipe> favorites;
+
+//	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//	private List<Review> reviews;
 
 	public Person() {
 		id = -1;
@@ -145,4 +158,34 @@ public class Person implements ImageAndPicture{
 		this.shoppingList = shoppingList;
 	}
 
+    public List<Recipe> getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(List<Recipe> recipes) {
+        this.recipes = recipes;
+    }
+
+    public Float getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(Float averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public List<FRecipe> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<FRecipe> favorites) {
+        this.favorites = favorites;
+    }
+
+//    public List<Review> getReviews() {
+//		return reviews;
+//	}
+//	public void setReviews(List<Review> reviews) {
+//		this.reviews = reviews;
+//	}
 }

@@ -1,13 +1,13 @@
 package db.app.recipe;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import db.app.review.Review;
-import db.app.util.ImageAndPicture;
 import db.app.person.Person;
 import db.app.recipeSteps.RecipeSteps;
+import db.app.util.ImageAndPicture;
 
 import javax.persistence.*;
 import java.sql.Blob;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -149,6 +149,22 @@ public class Recipe implements ImageAndPicture {
     public void setSteps(List<RecipeSteps> steps) {
         this.steps = steps;
     }
+
+    public static Comparator<Recipe> RecipeComparator = new Comparator<Recipe>() {
+        //Compare by star rating, then total time
+        @Override
+        public int compare(Recipe o1, Recipe o2) {
+            if (o1.getAverageRating() > o2.getAverageRating())
+                return -1;
+            else if (o1.getAverageRating() < o2.getAverageRating())
+                return 1;
+            else {
+                int time1 = o1.getCookSecs() + o1.getPrepSecs();
+                int time2 = o1.getCookSecs() + o2.getPrepSecs();
+                return time1 > time2 ? 1 : -1;
+            }
+        }
+    };
 
 //    public List<Review> getReviews() {
 //        return reviews;

@@ -83,6 +83,12 @@ public class RecipeController {
         recipeService.removeIngredientFromRecipe(recipeId, ingredientName);
     }
 
+    /**
+     * Returns a List of Recipes meeting the specified search parameters
+     *
+     * @param search The parameters to compare Recipes to
+     * @return A List of Recipes meeting the specified search parameters
+     */
     @RequestMapping(method = RequestMethod.POST, value = "/search")
     public List<Recipe> search(@RequestBody Search search) {
         return recipeService.search(search);
