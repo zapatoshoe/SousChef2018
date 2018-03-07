@@ -86,11 +86,14 @@ public class RecipeController {
     /**
      * Returns a List of Recipes meeting the specified search parameters
      *
-     * @param search The parameters to compare Recipes to
+     * @param arr An array of size 1 holding the parameters to compare Recipes to
      * @return A List of Recipes meeting the specified search parameters
      */
     @RequestMapping(method = RequestMethod.POST, value = "/search")
-    public List<Recipe> search(@RequestBody Search search) {
+    public List<Recipe> search(@RequestBody List<Search> arr) {
+        if(arr == null || arr.isEmpty() || arr.size() > 1)
+            return null;
+        Search search = arr.get(0);
         return recipeService.search(search);
     }
 
