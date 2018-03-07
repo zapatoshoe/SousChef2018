@@ -5,9 +5,7 @@ import java.util.List;
 public class Search {
     private Float starRating;
 
-    private Integer cookSecs;
-
-    private Integer prepSecs;
+    private Integer time;
 
     /**
      * List of all the desired types
@@ -32,30 +30,11 @@ public class Search {
         this.starRating = starRating;
     }
 
-    public Integer getCookSecs() {
-        return cookSecs;
+    public Integer getTime() {
+        return time;
     }
-
-    /**
-     * The maximum amount of cook time a Recipe can have in seconds
-     * Range: 0-Integer.MAX_VALUE
-     * @param cookSecs
-     */
-    public void setCookSecs(Integer cookSecs) {
-        this.cookSecs = cookSecs;
-    }
-
-    public Integer getPrepSecs() {
-        return prepSecs;
-    }
-
-    /**
-     * The maximum amount of prep time a Recipe can have in seconds
-     * Range: 0-Integer.MAX_VALUE
-     * @param prepSecs
-     */
-    public void setPrepSecs(Integer prepSecs) {
-        this.prepSecs = prepSecs;
+    public void setTime(Integer time) {
+        this.time = time;
     }
 
     public List<String> getTypes() {

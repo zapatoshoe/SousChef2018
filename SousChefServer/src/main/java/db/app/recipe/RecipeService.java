@@ -100,9 +100,9 @@ public class RecipeService {
         Recipe old = recipeRepository.findOne(recipeId);
         if (old == null)
             return;
-        old.setCookSecs(newRecipe.getCookSecs());
+        old.setCookMins(newRecipe.getCookMins());
         old.setDescription(newRecipe.getDescription());
-        old.setPrepSecs(newRecipe.getPrepSecs());
+        old.setPrepMins(newRecipe.getPrepMins());
         old.setTitle(newRecipe.getTitle());
         old.setTypes(newRecipe.getTypes());
         recipeRepository.save(old);
@@ -144,7 +144,7 @@ public class RecipeService {
         for (RInventory i : ingredients) {
             if (i.getIngredient().equals(actual)) {
                 try {
-                    //Due to Inheritance issues, a statement must be used in order to correctly delete the RInventory
+                    //Due to some dumbass issue, a statement must be used in order to correctly delete the RInventory
                     PreparedStatement stmt = SousChefServer.db.prepareStatement("DELETE FROM db309yt1.recipe_inventory WHERE id=?;");
                     stmt.setInt(1, i.getId());
                     stmt.executeUpdate();
@@ -159,7 +159,7 @@ public class RecipeService {
     /**
      * Returns a List of recipes that match the Search paramaters
      * Recipes must match all, if any, types,
-     * fall under the specified number of cookMins, prepMins, and above the star rating
+     * fall under the specified number of time (minutes) and above the star rating
      * Must also have the keyword if specified
      * <p>
      * If no parameter is explicated, filter will not be applied for that parameter
@@ -175,13 +175,10 @@ public class RecipeService {
         }
         filterKeywordsAndTypes(search, valid);
         float minStars = search.getStarRating() == null ? 0 : search.getStarRating();   //If no rating specified, min is 0
-        int maxCook = search.getCookSecs() == null ? Integer.MAX_VALUE : search.getCookSecs();    //if no max cook specified, max is max value
-        int maxPrep = search.getPrepSecs() == null ? Integer.MAX_VALUE : search.getPrepSecs();
-        Set<Recipe> toRemove = new HashSet<>();         //must use other Set to avoid removing elements during a loop
+        int maxTime = search.getTime() == null ? Integer.MAX_VALUE : search.getTime();
+        Set<Recipe> toRemove = new HashSet<>();         //must use other Set to avoid removing elements during a loop (failfast)
         for (Recipe r : valid) {
-            if (r.getCookSecs() > maxCook)
-                toRemove.add(r);
-            else if (r.getPrepSecs() > maxPrep)
+            if (r.getCookMins() + r.getPrepMins() > maxTime)
                 toRemove.add(r);
 //            else if (r.getStarRating() < minStars)
 //                toRemove.add(r);

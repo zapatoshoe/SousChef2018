@@ -26,9 +26,9 @@ public class Recipe implements ImageAndPicture {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    private Integer prepSecs;
+    private Integer prepMins;
 
-    private Integer cookSecs;
+    private Integer cookMins;
 
     private Float averageRating;
 
@@ -80,18 +80,18 @@ public class Recipe implements ImageAndPicture {
         this.description = description;
     }
 
-    public Integer getPrepSecs() {
-        return prepSecs;
+    public Integer getPrepMins() {
+        return prepMins;
     }
-    public void setPrepSecs(Integer prepMins) {
-        this.prepSecs = prepMins;
+    public void setPrepMins(Integer prepMins) {
+        this.prepMins = prepMins;
     }
 
-    public Integer getCookSecs() {
-        return cookSecs;
+    public Integer getCookMins() {
+        return cookMins;
     }
-    public void setCookSecs(Integer cookMins) {
-        this.cookSecs = cookMins;
+    public void setCookMins(Integer cookMins) {
+        this.cookMins = cookMins;
     }
 
     public Float getAverageRating() {
@@ -159,8 +159,8 @@ public class Recipe implements ImageAndPicture {
             else if (o1.getAverageRating() < o2.getAverageRating())
                 return 1;
             else {
-                int time1 = o1.getCookSecs() + o1.getPrepSecs();
-                int time2 = o1.getCookSecs() + o2.getPrepSecs();
+                int time1 = o1.getCookMins() + o1.getPrepMins();
+                int time2 = o1.getCookMins() + o2.getPrepMins();
                 return time1 > time2 ? 1 : -1;
             }
         }

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import db.app.ingredient.Ingredient;
 import db.app.recipeSteps.RecipeSteps;
-import db.app.review.Review;
 import db.app.util.Helpers;
 
 public class RecipeSerializer extends StdSerializer<Recipe> {
@@ -26,8 +25,8 @@ public class RecipeSerializer extends StdSerializer<Recipe> {
             jgen.writeNumberField("id", recipe.getId());                        //"id": "recipe.getId()",
             jgen.writeStringField("title", recipe.getTitle());                  //"title": "recipe.getTitle()",
             jgen.writeStringField("description", recipe.getDescription());      //"description": recipe.getDescription()",
-            jgen.writeNumberField("cookSecs", recipe.getCookSecs());            //"cookMins": "recipe.getCookMins()",
-            jgen.writeNumberField("prepSecs", recipe.getPrepSecs());            //"prepMins": "recipe.getPrepMins()",
+            jgen.writeNumberField("cookMins", recipe.getCookMins());            //"cookMins": recipe.getCookMins(),
+            jgen.writeNumberField("prepMins", recipe.getPrepMins());            //"prepMins": recipe.getPrepMins(),
             jgen.writeNumberField("ownerId", recipe.getOwner().getId());        //"ownerId": recipe.getOwner().getId(),
             jgen.writeStringField("types", recipe.getTypes());                    //"types": "recipe.getTypes()",
             jgen.writeNumberField("averageRating", recipe.getAverageRating());
