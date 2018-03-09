@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import db.app.inventory.Inventory;
 import db.app.inventory.InventorySerializer;
+import db.app.review.Review;
 import db.app.util.Helpers;
 
-import java.io.IOException;
+import java.io.*;
+import java.sql.Blob;
 
 public class PersonSerializer extends StdSerializer<Person> {
 
@@ -36,9 +38,27 @@ public class PersonSerializer extends StdSerializer<Person> {
             }
         }
         jgen.writeEndArray();   //],
+//        jgen.writeFieldName("reviews");   //TODO
+//        jgen.writeStartArray();
+//        if(person.getReviews() != null) {
+//            for(Review review : person.getReviews()) {
+//                jgen.writeStartObject();
+//                jgen.writeNumberField("id", review.getId());
+//                jgen.writeNumberField("rating", review.getRating());
+//                jgen.writeStringField("title", review.getTitle());
+//                jgen.writeStringField("body", review.getBody());
+//                jgen.writeStringField("date", review.getDate().toString());
+//                jgen.writeEndObject();
+//            }
+//        }
+//        jgen.writeEndObject();
         jgen.writeStringField("image", person.getImage());  //"image": "person.getImage()",
         jgen.writeStringField("created", person.getCreated().toString());   //"created": "person.getCreated()",
-        jgen.writeStringField("lastLogin", person.getLastLogin().toString());   //"lastLogin": "person.getLastLogin()",
+        if(person.getLastLogin() != null)
+            jgen.writeStringField("lastLogin", person.getLastLogin().toString());   //"lastLogin": "person.getLastLogin()",
+        else
+            jgen.writeNullField("lastLogin");
+        jgen.writeNumberField("numRecipes", person.getNumRecipes());
         jgen.writeEndObject();  //}
     }
 }

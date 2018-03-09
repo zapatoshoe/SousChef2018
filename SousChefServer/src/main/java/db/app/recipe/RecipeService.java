@@ -78,7 +78,11 @@ public class RecipeService {
             return;
         recipe.setOwner(person);    //ensure properly setting the person field
         recipe.setCreatedDate(new Date());
-        recipeRepository.save(recipe);
+        recipe.setNumReviews(0);
+        Recipe ret = recipeRepository.save(recipe);
+        if(ret == null)     //if there were errors saving the recipe
+            return;
+        person.setNumRecipes(person.getNumRecipes() + 1);
     }
 
     /**
@@ -87,6 +91,11 @@ public class RecipeService {
      * @param recipeId The id of the recipe to be deleted
      */
     public void deleteRecipe(Integer recipeId) {
+        Recipe r = recipeRepository.findOne(recipeId);
+        if(r == null)       //if no recipe found
+            return;
+        Person person = r.getOwner();
+        person.setNumRecipes(person.getNumRecipes() - 1);
         recipeRepository.delete(recipeId);
     }
 
@@ -180,7 +189,7 @@ public class RecipeService {
         for (Recipe r : valid) {
             if (r.getCookMins() + r.getPrepMins() > maxTime)
                 toRemove.add(r);
-//            else if (r.getStarRating() < minStars)
+//            else if (r.getStarRating() < minStars)    //TODO
 //                toRemove.add(r);
         }
         valid.removeAll(toRemove);
@@ -199,8 +208,8 @@ public class RecipeService {
         List<Recipe> toKeep = new ArrayList<>();
         /*
         4 scenarios
-        1.) Has keyword and types
-        2.) Has keyword
+        1.) Has keywords and types
+        2.) Has keywords
         3.) Has types
         4.) None
          */

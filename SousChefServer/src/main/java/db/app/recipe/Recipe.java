@@ -36,6 +36,8 @@ public class Recipe implements ImageAndPicture {
 
     private Date createdDate;
 
+    private Integer numReviews;
+
     private Blob picture;
 
     @Transient
@@ -55,6 +57,7 @@ public class Recipe implements ImageAndPicture {
     public Integer getId() {
         return id;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -62,6 +65,7 @@ public class Recipe implements ImageAndPicture {
     public Person getOwner() {
         return owner;
     }
+
     public void setOwner(Person owner) {
         this.owner = owner;
     }
@@ -69,6 +73,7 @@ public class Recipe implements ImageAndPicture {
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -76,6 +81,7 @@ public class Recipe implements ImageAndPicture {
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -83,6 +89,7 @@ public class Recipe implements ImageAndPicture {
     public Integer getPrepMins() {
         return prepMins;
     }
+
     public void setPrepMins(Integer prepMins) {
         this.prepMins = prepMins;
     }
@@ -90,6 +97,7 @@ public class Recipe implements ImageAndPicture {
     public Integer getCookMins() {
         return cookMins;
     }
+
     public void setCookMins(Integer cookMins) {
         this.cookMins = cookMins;
     }
@@ -97,6 +105,7 @@ public class Recipe implements ImageAndPicture {
     public Float getAverageRating() {
         return averageRating;
     }
+
     public void setAverageRating(Float averageRating) {
         this.averageRating = averageRating;
     }
@@ -104,6 +113,7 @@ public class Recipe implements ImageAndPicture {
     public String getTypes() {
         return types;
     }
+
     public void setTypes(String types) {
         this.types = types;
     }
@@ -111,13 +121,23 @@ public class Recipe implements ImageAndPicture {
     public Date getCreatedDate() {
         return createdDate;
     }
+
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public Integer getNumReviews() {
+        return numReviews;
+    }
+
+    public void setNumReviews(Integer numReviews) {
+        this.numReviews = numReviews;
     }
 
     public Blob getPicture() {
         return picture;
     }
+
     public void setPicture(Blob picture) {
         this.picture = picture;
     }
@@ -125,6 +145,7 @@ public class Recipe implements ImageAndPicture {
     public String getImage() {
         return image;
     }
+
     public void setImage(String image) {
         this.image = image;
     }
@@ -132,6 +153,7 @@ public class Recipe implements ImageAndPicture {
     public boolean isVerbose() {
         return verbose;
     }
+
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;
     }
@@ -139,6 +161,7 @@ public class Recipe implements ImageAndPicture {
     public List<RInventory> getInv() {
         return inv;
     }
+
     public void setInv(List<RInventory> inv) {
         this.inv = inv;
     }
@@ -146,30 +169,32 @@ public class Recipe implements ImageAndPicture {
     public List<RecipeSteps> getSteps() {
         return steps;
     }
+
     public void setSteps(List<RecipeSteps> steps) {
         this.steps = steps;
     }
 
-    public static Comparator<Recipe> RecipeComparator = new Comparator<Recipe>() {
-        //Compare by star rating, then total time
-        @Override
-        public int compare(Recipe o1, Recipe o2) {
-            if (o1.getAverageRating() > o2.getAverageRating())
-                return -1;
-            else if (o1.getAverageRating() < o2.getAverageRating())
-                return 1;
-            else {
-                int time1 = o1.getCookMins() + o1.getPrepMins();
-                int time2 = o1.getCookMins() + o2.getPrepMins();
-                return time1 > time2 ? 1 : -1;
-            }
-        }
-    };
 
+    //Compare by star rating, then total time
+    //    }
 //    public List<Review> getReviews() {
+//        this.reviews = reviews;
+//    public void setReviews(List<Review> reviews) {
+//    }
 //        return reviews;
 //    }
-//    public void setReviews(List<Review> reviews) {
-//        this.reviews = reviews;
-//    }
+    public static Comparator<Recipe> RecipeComparator = (o1, o2) -> {
+        if (o1.getAverageRating() > o2.getAverageRating())
+            return -1;
+        else if (o1.getAverageRating() < o2.getAverageRating())
+            return 1;
+        else {
+            int time1 = o1.getCookMins() + o1.getPrepMins();
+            int time2 = o1.getCookMins() + o2.getPrepMins();
+            if(time1 == time2)
+                return 0;
+            else
+                return time1 > time2 ? 1 : -1;
+        }
+    };
 }

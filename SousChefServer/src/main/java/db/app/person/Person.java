@@ -65,6 +65,8 @@ public class Person implements ImageAndPicture{
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Recipe> recipes;
 
+	private Integer numRecipes;
+
     private Float averageRating;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -166,7 +168,14 @@ public class Person implements ImageAndPicture{
         this.recipes = recipes;
     }
 
-    public Float getAverageRating() {
+	public Integer getNumRecipes() {
+		return numRecipes;
+	}
+	public void setNumRecipes(Integer numRecipes) {
+		this.numRecipes = numRecipes;
+	}
+
+	public Float getAverageRating() {
         return averageRating;
     }
 
