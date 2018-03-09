@@ -53,9 +53,19 @@ public class PersonService {
 	 * @param id The id of the person
 	 */
 	public void updatePerson(Person person, Integer id) {
-		person.setId(id);
-		Helpers.convertStringToBlob(person);
-		personRepository.save(person);	//same as add but repository knows to update existing rows
+		Person actual = personRepository.findOne(id);
+		if(actual == null)
+			return;
+		if(person.getEmail() != null)
+			actual.setEmail(person.getEmail());
+		if(person.getImage() != null)
+			actual.setImage(person.getImage());
+		if(person.getName() != null)
+			actual.setName(person.getName());
+		if(person.getType() != null)
+			actual.setType(person.getType());
+		Helpers.convertStringToBlob(actual);
+		personRepository.save(actual);	//same as add but repository knows to update existing rows
 	}
 
 	/**

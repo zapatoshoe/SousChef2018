@@ -66,7 +66,7 @@ public class RecipeSerializer extends StdSerializer<Recipe> {
 //                }
             }
             jgen.writeStringField("createdDate", recipe.getCreatedDate().toString());
-            jgen.writeStringField("image", recipe.getImage());                  //"image": "recipe.getImage()"
+            jgen.writeStringField("image", recipe.getImage());                  //TODO send as byte[] "image": "recipe.getImage()"
             jgen.writeEndObject();                                                      //}
         } catch(Exception e) {
             e.printStackTrace();

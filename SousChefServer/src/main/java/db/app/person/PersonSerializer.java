@@ -7,7 +7,8 @@ import db.app.inventory.Inventory;
 import db.app.inventory.InventorySerializer;
 import db.app.util.Helpers;
 
-import java.io.IOException;
+import java.io.*;
+import java.sql.Blob;
 
 public class PersonSerializer extends StdSerializer<Person> {
 
@@ -38,7 +39,10 @@ public class PersonSerializer extends StdSerializer<Person> {
         jgen.writeEndArray();   //],
         jgen.writeStringField("image", person.getImage());  //"image": "person.getImage()",
         jgen.writeStringField("created", person.getCreated().toString());   //"created": "person.getCreated()",
-        jgen.writeStringField("lastLogin", person.getLastLogin().toString());   //"lastLogin": "person.getLastLogin()",
+        if(person.getLastLogin() != null)
+            jgen.writeStringField("lastLogin", person.getLastLogin().toString());   //"lastLogin": "person.getLastLogin()",
+        else
+            jgen.writeNullField("lastLogin");
         jgen.writeEndObject();  //}
     }
 }
