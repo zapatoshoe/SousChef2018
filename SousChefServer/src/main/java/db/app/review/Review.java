@@ -19,7 +19,7 @@ public class Review {
     @ManyToOne
     private Recipe recipe;
 
-    private Integer rating;
+    private float rating;
 
     private String title;
 
@@ -68,11 +68,11 @@ public class Review {
         this.recipe = recipe;
     }
 
-    public Integer getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(Integer rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 
