@@ -22,7 +22,7 @@ public class ReviewController {
         return reviewService.getRecipeReviews(recipeId);
     }
 
-    @RequestMapping("/person/{personId")
+    @RequestMapping("/person/{personId}")
     public List<Review> getPersonReviews(@PathVariable Integer personId){
         return reviewService.getPersonReviews(personId);
     }
