@@ -6,7 +6,7 @@ import db.app.person.Person;
 import javax.persistence.*;
 
 @Entity
-public class Inventory {
+public class Inventory implements Comparable<Inventory>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,5 +45,10 @@ public class Inventory {
     @Override
     public boolean equals(Object o) {
         return o instanceof Inventory && this.ingredient.equals(((Inventory)o).ingredient);
+    }
+
+    @Override
+    public int compareTo(Inventory o) {
+        return ingredient.getName().compareTo(o.ingredient.getName());
     }
 }

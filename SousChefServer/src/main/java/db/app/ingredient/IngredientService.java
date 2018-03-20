@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -15,6 +16,7 @@ public class IngredientService {
     public List<Ingredient> getAllIngredients() {
         List<Ingredient> l = new ArrayList<>();
         ingredientRepository.findAll().forEach(l::add);
+        Collections.sort(l);
         return l;
     }
 
@@ -33,6 +35,8 @@ public class IngredientService {
     }
 
     public List<Ingredient> getAllByType(IngredientType type) {
-        return ingredientRepository.findByType(type);
+        List<Ingredient> l = ingredientRepository.findByType(type);
+        Collections.sort(l);
+        return l;
     }
 }
