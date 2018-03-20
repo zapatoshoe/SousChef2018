@@ -109,9 +109,9 @@ public class RecipeService {
         Recipe old = recipeRepository.findOne(recipeId);
         if (old == null)
             return;
-        old.setCookMins(newRecipe.getCookMins());
+        old.setTime(newRecipe.getTime());
         old.setDescription(newRecipe.getDescription());
-        old.setPrepMins(newRecipe.getPrepMins());
+        old.setTime(newRecipe.getTime());
         old.setTitle(newRecipe.getTitle());
         old.setTypes(newRecipe.getTypes());
         recipeRepository.save(old);
@@ -187,7 +187,7 @@ public class RecipeService {
         int maxTime = search.getTime() == null ? Integer.MAX_VALUE : search.getTime();
         Set<Recipe> toRemove = new HashSet<>();         //must use other Set to avoid removing elements during a loop (failfast)
         for (Recipe r : valid) {
-            if (r.getCookMins() + r.getPrepMins() > maxTime)
+            if (r.getTime() > maxTime)
                 toRemove.add(r);
 //            else if (r.getStarRating() < minStars)    //TODO
 //                toRemove.add(r);
