@@ -12,6 +12,11 @@ public class ReviewController {
     @Autowired
     ReviewService reviewService;
 
+    /**
+     * Returns the review given a specific reviewId
+     * @param reviewId the review that is desired
+     * @return the review with the specific reviewId
+     */
     @RequestMapping("/{reviewId}")
     public Review getReview(@PathVariable Integer reviewId){
         return reviewService.getReview(reviewId);

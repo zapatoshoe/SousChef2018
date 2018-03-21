@@ -1,5 +1,6 @@
 package db.app.review;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import db.app.person.Person;
 import db.app.recipe.Recipe;
 
@@ -7,6 +8,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@JsonSerialize(using = ReviewSerializer.class)
 public class Review {
 
     @Id

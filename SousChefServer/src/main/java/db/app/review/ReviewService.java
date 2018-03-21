@@ -22,20 +22,19 @@ public class ReviewService {
     @Autowired
     ReviewRepository reviewRepository;
 
-    public void updateRatings(Review review, boolean added, boolean deleted){
+    public void updateRatings(Review review, boolean deleted){
         Recipe recipe = recipeRepository.findOne(review.getRecipe().getId());
         Person person = personRepository.findOne(review.getRecipe().getOwner().getId());
         List<Recipe> list = recipeRepository.findByOwner(person);
-        float add = 0;
-        if(added){
-            add = 1;
-        }
+        int add = 1;
+        int mult = 1;
         if(deleted){
-            add = -1;
+            add = mult = -1;
         }
         float rating = recipe.getAverageRating() * recipe.getNumReviews();
-        rating = (rating + review.getRating())/(recipe.getNumReviews() + add);
+        rating = (rating + (review.getRating() * mult))/(recipe.getNumReviews() + add);
         recipe.setAverageRating(rating);
+        recipe.setNumReviews(recipe.getNumReviews() + add);
         recipeRepository.save(recipe);
         rating = 0;
         int numReviews = 0;
@@ -43,7 +42,7 @@ public class ReviewService {
             rating += list.get(i).getAverageRating() * list.get(i).getNumReviews();
             numReviews += list.get(i).getNumReviews();
         }
-        rating = (rating + review.getRating())/(numReviews + add);
+        rating = rating/numReviews + add;
         person.setAverageRating(rating);
         personRepository.save(person);
 
@@ -72,10 +71,21 @@ public class ReviewService {
         review.setRecipe(recipe);
         review.setOwner(owner);
         review.setDate(new Date());
+        updateRatings(review, false);
         reviewRepository.save(review);
     }
 
     public void updateReview(Integer reviewId, Review newReview) {
+        Review old = reviewRepository.findOne(reviewId);
+        if(old == null){
+            return;
+        }
+        updateRatings(old, true);
+        old.setTitle(newReview.getTitle());
+        old.setRating(newReview.getRating());
+        old.setDescription(newReview.getDescription());
+        updateRatings(old, false);
+        reviewRepository.save(old);
     }
 
     public void deleteReview(Integer reviewId) {
@@ -83,6 +93,7 @@ public class ReviewService {
         if(review == null){
             return;
         }
+        updateRatings(review, true);
         reviewRepository.delete(reviewId);
     }
 }
