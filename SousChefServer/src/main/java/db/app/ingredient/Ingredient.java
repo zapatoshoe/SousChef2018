@@ -3,7 +3,7 @@ package db.app.ingredient;
 import javax.persistence.*;
 
 @Entity
-public class Ingredient {
+public class Ingredient implements Comparable<Ingredient>{
 
     /**
      * Unique ID number
@@ -86,6 +86,10 @@ public class Ingredient {
         return this.name.equals(((Ingredient) ingredient).name);
     }
 
+    @Override
+    public int compareTo(Ingredient o) {
+        return name.compareTo(o.name);
+    }
 }
 
 
