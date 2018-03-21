@@ -56,6 +56,9 @@ public class Person implements ImageAndPicture{
 	@Transient
 	private String image;
 
+	@Transient
+	private boolean verbose;
+
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<Inventory> inventory;
 
@@ -146,7 +149,14 @@ public class Person implements ImageAndPicture{
 		this.image = image;
 	}
 
-	public List<Inventory> getInventory() {
+    public boolean isVerbose() {
+        return verbose;
+    }
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
+    }
+
+    public List<Inventory> getInventory() {
 		return inventory;
 	}
 	public void setInventory(List<Inventory> inventory) {

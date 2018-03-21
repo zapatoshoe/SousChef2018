@@ -37,6 +37,11 @@ public class PersonController {
 	public Person getPerson(@PathVariable Integer id) {
 		return personService.getPerson(id);
 	}
+
+	@RequestMapping("/{id}/preview")
+	public Person getPersonPreview(@PathVariable Integer id) {
+		return personService.getPersonPreview(id);
+	}
 	
 	/**
 	 * Inserts a person into the database

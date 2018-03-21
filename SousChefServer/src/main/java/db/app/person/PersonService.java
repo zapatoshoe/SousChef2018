@@ -21,7 +21,23 @@ public class PersonService {
 	 */
 	public Person getPerson(Integer id) {
 		Person me = personRepository.findOne(id);
-		return me == null ? new Person() : me;
+		if(me == null)
+			return new Person();
+		else {
+			me.setVerbose(true);
+			return me;
+		}
+	}
+
+
+	public Person getPersonPreview(Integer id) {
+		Person me = personRepository.findOne(id);
+		if(me == null)
+			return new Person();
+		else {
+			me.setVerbose(false);
+			return me;
+		}
 	}
 
 	/**
@@ -30,7 +46,10 @@ public class PersonService {
 	 */
 	public List<Person> getAllPersons() {
 		List<Person> l = new ArrayList<>();
-		personRepository.findAll().forEach(l::add);
+		for(Person p : personRepository.findAll()) {
+			p.setVerbose(false);
+			l.add(p);
+		}
 		return l;
 	}
 
@@ -90,6 +109,7 @@ public class PersonService {
 		if(actual.getPassword().equals(person.getPassword())) {
 			actual.setLastLogin(new Date());
 			personRepository.save(actual);
+			actual.setVerbose(true);
 			return actual;
 		}
 		return new Person();

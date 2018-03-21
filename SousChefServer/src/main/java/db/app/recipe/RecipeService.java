@@ -83,6 +83,7 @@ public class RecipeService {
         if(ret == null)     //if there were errors saving the recipe
             return;
         person.setNumRecipes(person.getNumRecipes() + 1);
+        personService.updatePerson(person, person.getId());
     }
 
     /**
@@ -97,6 +98,7 @@ public class RecipeService {
         Person person = r.getOwner();
         person.setNumRecipes(person.getNumRecipes() - 1);
         recipeRepository.delete(recipeId);
+        personService.updatePerson(person, person.getId());
     }
 
     /**
