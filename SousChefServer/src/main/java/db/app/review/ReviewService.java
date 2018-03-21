@@ -29,11 +29,18 @@ public class ReviewService {
         int add = 1;
         int mult = 1;
         if(deleted){
-            add = mult = -1;
+            add = -1;
+            mult = -1;
         }
-        float rating = recipe.getAverageRating() * recipe.getNumReviews();
-        rating = (rating + (review.getRating() * mult))/(recipe.getNumReviews() + add);
-        recipe.setAverageRating(rating);
+        float rating;
+        if(recipe.getNumReviews() + add == 0){
+            recipe.setAverageRating((float)0);
+        }
+        else {
+            rating = recipe.getAverageRating() * recipe.getNumReviews();
+            rating = (rating + (review.getRating() * mult)) / (recipe.getNumReviews() + add);
+            recipe.setAverageRating(rating);
+        }
         recipe.setNumReviews(recipe.getNumReviews() + add);
         recipeRepository.save(recipe);
         rating = 0;
@@ -42,8 +49,13 @@ public class ReviewService {
             rating += list.get(i).getAverageRating() * list.get(i).getNumReviews();
             numReviews += list.get(i).getNumReviews();
         }
-        rating = rating/numReviews + add;
-        person.setAverageRating(rating);
+        if(numReviews == 0){
+            person.setAverageRating((float)0);
+        }
+        else {
+            rating = rating / numReviews;
+            person.setAverageRating(rating);
+        }
         personRepository.save(person);
 
     }
