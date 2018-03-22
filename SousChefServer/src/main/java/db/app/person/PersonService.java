@@ -83,6 +83,8 @@ public class PersonService {
 			actual.setName(person.getName());
 		if(person.getType() != null)
 			actual.setType(person.getType());
+		if(person.getPassword() != null)
+			actual.setPassword(person.getPassword());
 		Helpers.convertStringToBlob(actual);
 		personRepository.save(actual);	//same as add but repository knows to update existing rows
 	}
