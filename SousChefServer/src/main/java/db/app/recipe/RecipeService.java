@@ -79,6 +79,7 @@ public class RecipeService {
         recipe.setOwner(person);    //ensure properly setting the person field
         recipe.setCreatedDate(new Date());
         recipe.setNumReviews(0);
+        recipe.setAverageRating((float)0);
         Recipe ret = recipeRepository.save(recipe);
         if(ret == null)     //if there were errors saving the recipe
             return;
