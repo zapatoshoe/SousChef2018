@@ -20,6 +20,7 @@ public class ReviewSerializer extends StdSerializer<Review> {
             jgen.writeStartObject();
             jgen.writeNumberField("id", review.getId());
             jgen.writeNumberField("ownerId", review.getOwner().getId());
+            jgen.writeStringField("ownerName", review.getOwner().getName());
             jgen.writeNumberField("recipeId", review.getRecipe().getId());
             jgen.writeNumberField("rating", review.getRating());
             jgen.writeStringField("title", review.getTitle());
