@@ -81,6 +81,7 @@ public class RecipeService {
         recipe.setCreatedDate(new Date());
         recipe.setNumReviews(0);
         recipe.setAverageRating((float)0);
+        Helpers.convertStringToBlob(recipe);
         Recipe ret = recipeRepository.save(recipe);
         if(ret == null)     //if there were errors saving the recipe
             return;
@@ -115,9 +116,11 @@ public class RecipeService {
             return;
         old.setTime(newRecipe.getTime());
         old.setDescription(newRecipe.getDescription());
-        old.setTime(newRecipe.getTime());
         old.setTitle(newRecipe.getTitle());
         old.setTypes(newRecipe.getTypes());
+        old.setImage(newRecipe.getImage());
+        old.setCreatedDate(new Date());
+        Helpers.convertStringToBlob(old);
         recipeRepository.save(old);
     }
 
@@ -135,6 +138,7 @@ public class RecipeService {
             return;
         inventory.setIngredient(i);       //set the ingredient properly
         inventory.setRecipe(recipe);
+        recipe.setCreatedDate(new Date());
         rInventoryRepository.save(inventory);
     }
 
@@ -164,6 +168,7 @@ public class RecipeService {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+                recipe.setCreatedDate(new Date());
                 return;
             }
         }
