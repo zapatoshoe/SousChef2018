@@ -6,6 +6,10 @@ import db.app.ingredient.IngredientService;
 import db.app.inventory.Inventory;
 import db.app.person.Person;
 import db.app.person.PersonService;
+import db.app.recipeSteps.RecipeSteps;
+import db.app.recipeSteps.RecipeStepsService;
+import db.app.review.Review;
+import db.app.review.ReviewService;
 import db.app.util.Helpers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +29,10 @@ public class RecipeService {
     private RInventoryRepository rInventoryRepository;
     @Autowired
     private IngredientService ingredientService;
+    @Autowired
+    private RecipeStepsService recipeStepsService;
+    @Autowired
+    private ReviewService reviewService;
 
     /**
      * Returns every Recipe in the database
@@ -100,6 +108,11 @@ public class RecipeService {
             return;
         Person person = r.getOwner();
         person.setNumRecipes(person.getNumRecipes() - 1);
+        for(RInventory ri : r.getInv())
+            rInventoryRepository.delete(ri.getId());
+        recipeStepsService.deleteRecipeSteps(recipeId);
+        for(Review review : r.getReviews())
+            reviewService.deleteReview(review.getId());
         recipeRepository.delete(recipeId);
         personService.updatePerson(person, person.getId());
     }

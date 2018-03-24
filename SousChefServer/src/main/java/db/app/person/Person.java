@@ -5,6 +5,7 @@ import db.app.inventory.Inventory;
 import db.app.listItem.ListItem;
 import db.app.recipe.Recipe;
 import db.app.recipeFavorite.FRecipe;
+import db.app.review.Review;
 import db.app.util.ImageAndPicture;
 
 import javax.persistence.*;
@@ -75,8 +76,8 @@ public class Person implements ImageAndPicture{
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<FRecipe> favorites;
 
-//	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-//	private List<Review> reviews;
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	private List<Review> reviews;
 
 	public Person() {
 		id = -1;
@@ -201,10 +202,10 @@ public class Person implements ImageAndPicture{
         this.favorites = favorites;
     }
 
-//    public List<Review> getReviews() {
-//		return reviews;
-//	}
-//	public void setReviews(List<Review> reviews) {
-//		this.reviews = reviews;
-//	}
+    public List<Review> getReviews() {
+		return reviews;
+	}
+	public void setReviews(List<Review> reviews) {
+		this.reviews = reviews;
+	}
 }

@@ -1,5 +1,11 @@
 package db.app.person;
 
+import db.app.inventory.Inventory;
+import db.app.inventory.InventoryService;
+import db.app.recipe.Recipe;
+import db.app.recipe.RecipeService;
+import db.app.review.Review;
+import db.app.review.ReviewService;
 import db.app.util.Helpers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +19,12 @@ import java.util.List;
 public class PersonService {
 	@Autowired
 	private PersonRepository personRepository;
+	@Autowired
+	private RecipeService recipeService;
+	@Autowired
+	private ReviewService reviewService;
+	@Autowired
+	private InventoryService inventoryService;
 
 	/**
 	 * Returns the person with corresponding id, null if not found
@@ -94,7 +106,13 @@ public class PersonService {
 	 * @param id The id of the person to remove
 	 */
 	public void deletePerson(Integer id) {
-			personRepository.delete(id);
+		Person toDelete = personRepository.findOne(id);
+		for(Recipe r : toDelete.getRecipes())
+			recipeService.deleteRecipe(r.getId());
+		for(Review r : toDelete.getReviews())
+			reviewService.deleteReview(r.getId());
+		inventoryService.deleteAllInventory(id);
+		personRepository.delete(id);
 	}
 
 	/**
