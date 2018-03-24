@@ -29,6 +29,16 @@ public class IngredientService {
         ingredientRepository.save(ingredient);
     }
 
+    public void updateIngredient(Integer ingredientId, Ingredient ingredient){
+        Ingredient old = ingredientRepository.findOne(ingredientId);
+        if(old == null){
+            return;
+        }
+        old.setName(ingredient.getName());
+        old.setType(ingredient.getType());
+        ingredientRepository.save(old);
+    }
+
     public void deleteIngredient(String name){
         List<Ingredient> list = ingredientRepository.findByName(name);
         ingredientRepository.delete(list.get(0).getId());
