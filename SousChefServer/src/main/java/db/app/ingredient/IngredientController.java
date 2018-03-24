@@ -51,6 +51,16 @@ public class IngredientController {
     }
 
     /**
+     * Updates a current ingredient object
+     * @param ingredientId the ID of the ingredient to be updated
+     * @param ingredient the new ingredient to replace the old
+     */
+    @RequestMapping(method = RequestMethod.PUT, value="/{ingredientId}")
+    public void updateIngredient(@PathVariable Integer ingredientId, @RequestBody Ingredient ingredient){
+        ingredientService.updateIngredient(ingredientId, ingredient);
+    }
+
+    /**
      * Removes a specific ingredient from the database
      * @param name the name of the ingredient to be removed
      */
