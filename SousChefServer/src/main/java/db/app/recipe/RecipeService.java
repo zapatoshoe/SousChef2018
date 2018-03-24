@@ -3,6 +3,7 @@ package db.app.recipe;
 import db.app.SousChefServer;
 import db.app.ingredient.Ingredient;
 import db.app.ingredient.IngredientService;
+import db.app.inventory.Inventory;
 import db.app.person.Person;
 import db.app.person.PersonService;
 import db.app.util.Helpers;
@@ -192,10 +193,12 @@ public class RecipeService {
         for (Recipe r : valid) {
             if (r.getTime() > maxTime)
                 toRemove.add(r);
-//            else if (r.getStarRating() < minStars)    //TODO
-//                toRemove.add(r);
+            else if (r.getAverageRating() < minStars)
+                toRemove.add(r);
         }
         valid.removeAll(toRemove);
+        if(search.getCheckInventory() != null && search.getCheckInventory())
+            filterByInventory(search.getOwnerId(), valid);
         //Sort by star rating then total time
         valid.sort(Recipe.RecipeComparator);
         return valid;
@@ -230,6 +233,7 @@ public class RecipeService {
                         }
                     }
                     valid.retainAll(toKeep);     //Get rid of anything not having this type
+                    toKeep.clear();             //Clear toKeep to contain only those with the next type
                 }
             } else {                //doesn't have types
                 for (Recipe r : valid) {
@@ -250,8 +254,35 @@ public class RecipeService {
                     //For each recipe matching that type, add it if has keyword
                     toKeep.addAll(recipeRepository.findByTypesContaining(type));
                     valid.retainAll(toKeep);     //Get rid of anything not having this type
+                    toKeep.clear();
                 }
             }
         }
+    }
+
+    /**
+     * Removes any Recipe r from valid if Person owner with id ownerId doesn't have
+     * all of the Ingredients for the Recipe r
+     * @param ownerId The id of the owner whose inventory we want to check
+     * @param valid The List of currently valid Recipes
+     */
+    private void filterByInventory(Integer ownerId, List<Recipe> valid) {
+        if(ownerId == null)
+            return;
+        Person p = personService.getPerson(ownerId);
+        Map<Integer, Ingredient> inventory = new HashMap<>();
+        for(Inventory i : p.getInventory()) {
+            inventory.put(i.getIngredient().hashCode(), i.getIngredient());
+        }
+        List<Recipe> toRemove = new ArrayList<>();
+        for(Recipe r : valid) {
+            for(RInventory i : r.getInv()) {
+                if(!inventory.containsKey(i.getIngredient().hashCode())) {
+                    toRemove.add(r);
+                    break;
+                }
+            }
+        }
+        valid.removeAll(toRemove);
     }
 }

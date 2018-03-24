@@ -78,12 +78,13 @@ public class Ingredient implements Comparable<Ingredient>{
         this.type = type;
     }
 
+    public int hashCode() {
+        return 31*17 + id;
+    }
+
     @Override
-    public boolean equals(Object ingredient){
-        if(!(ingredient instanceof Ingredient)){
-            return false;
-        }
-        return this.name.equals(((Ingredient) ingredient).name);
+    public boolean equals(Object ingredient) {
+        return ingredient instanceof Ingredient && this.name.equals(((Ingredient) ingredient).name);
     }
 
     @Override

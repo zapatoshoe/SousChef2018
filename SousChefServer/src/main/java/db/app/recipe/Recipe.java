@@ -170,13 +170,18 @@ public class Recipe implements ImageAndPicture {
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
     }
+
+    public int hashCode() {
+        return id;
+    }
+
     public static Comparator<Recipe> RecipeComparator = (o1, o2) -> {
         if (o1.getAverageRating() > o2.getAverageRating())
             return -1;
         else if (o1.getAverageRating() < o2.getAverageRating())
             return 1;
         else {
-            if(o1.getTime() == o2.getTime())
+            if(o1.getTime().equals(o2.getTime()))
                 return 0;
             else
                 return o1.getTime() > o2.getTime() ? 1 : -1;

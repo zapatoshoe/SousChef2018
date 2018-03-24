@@ -17,6 +17,10 @@ public class Search {
      */
     private List<String> keywords;
 
+    private Boolean checkInventory;
+
+    private Integer ownerId;
+
     public Float getStarRating() {
         return starRating;
     }
@@ -61,5 +65,22 @@ public class Search {
      */
     public void setKeywords(List<String> keywords) {
         this.keywords = keywords;
+    }
+
+    public Boolean checkInventory() {
+        return checkInventory;
+    }
+    public void setCheckInventory(Boolean checkInventory) {
+        this.checkInventory = checkInventory;
+    }
+    public Boolean getCheckInventory() {
+        return checkInventory;
+    }
+
+    public Integer getOwnerId() {
+        return ownerId;
+    }
+    public void setOwnerId(Integer ownerId) {
+        this.ownerId = ownerId;
     }
 }
