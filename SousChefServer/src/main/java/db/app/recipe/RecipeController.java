@@ -39,8 +39,8 @@ public class RecipeController {
      * recipe assumed to have these fields set already - Title, Description, CookMins, PrepMins, Type, ownerId
      */
     @RequestMapping(method = RequestMethod.POST, value = "/{ownerId}")
-    public void addRecipe(@PathVariable Integer ownerId, @RequestBody Recipe recipe) {
-        recipeService.addRecipe(ownerId, recipe);
+    public Recipe addRecipe(@PathVariable Integer ownerId, @RequestBody Recipe recipe) {
+        return recipeService.addRecipe(ownerId, recipe);
     }
 
     /**
