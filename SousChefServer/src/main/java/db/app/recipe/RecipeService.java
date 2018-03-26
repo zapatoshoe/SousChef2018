@@ -81,10 +81,10 @@ public class RecipeService {
      * @param ownerId The Owner of the recipe
      * @param recipe  The recipe to insert
      */
-    public void addRecipe(Integer ownerId, Recipe recipe) {
+    public Integer addRecipe(Integer ownerId, Recipe recipe) {
         Person person = personService.getPerson(ownerId);
         if (person == null)
-            return;
+            return 0;
         recipe.setOwner(person);    //ensure properly setting the person field
         recipe.setCreatedDate(new Date());
         recipe.setNumReviews(0);
@@ -92,9 +92,10 @@ public class RecipeService {
         Helpers.convertStringToBlob(recipe);
         Recipe ret = recipeRepository.save(recipe);
         if(ret == null)     //if there were errors saving the recipe
-            return;
+            return 0;
         person.setNumRecipes(person.getNumRecipes() + 1);
         personService.updatePerson(person, person.getId());
+        return ret.getId();
     }
 
     /**
