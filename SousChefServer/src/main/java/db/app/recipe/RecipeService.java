@@ -252,7 +252,7 @@ public class RecipeService {
      * @param valid  The original list of valid Recipes to be modified
      */
     private void filterKeywordsAndTypes(final Search search, List<Recipe> valid) {
-        List<Recipe> toKeep = new ArrayList<>();
+        Map<Integer, Recipe> toKeep = new HashMap<>();
         /*
         4 scenarios
         1.) Has keywords and types
@@ -264,37 +264,39 @@ public class RecipeService {
             if (search.getTypes() != null && !search.getTypes().isEmpty()) {       //has keyword and types
                 for (String type : search.getTypes()) {         //Go through each type
                     for (Recipe r : recipeRepository.findByTypesContaining(type)) {       //For each recipe matching that type, add it if has the keywords
-                        toKeep.add(r);
+                        toKeep.put(r.hashCode(), r);
                         for (String s : search.getKeywords()) {
                             //if it is missing any of the keywords, remove it
                             if (!(Helpers.containsIgnoreCase(r.getTitle(), s) || Helpers.containsIgnoreCase(r.getDescription(), s))) {
-                                toKeep.remove(r);
+                                toKeep.remove(r.hashCode(), r);
                                 break;
                             }
                         }
                     }
-                    valid.retainAll(toKeep);     //Get rid of anything not having this type
+                    valid.retainAll(toKeep.values());     //Get rid of anything not having this type
                     toKeep.clear();             //Clear toKeep to contain only those with the next type
                 }
             } else {                //doesn't have types
                 for (Recipe r : valid) {
-                    toKeep.add(r);
+                    toKeep.put(r.hashCode(), r);
                     for (String s : search.getKeywords()) {
                         //if it is missing any of the keywords, remove it
                         if (!(Helpers.containsIgnoreCase(r.getTitle(), s) || Helpers.containsIgnoreCase(r.getDescription(), s))) {
-                            toKeep.remove(r);
+                            toKeep.remove(r.hashCode(), r);
                             break;
                         }
                     }
                 }
-                valid.retainAll(toKeep);
+                valid.retainAll(toKeep.values());
             }
         } else {    //doesn't have keywords
             if (search.getTypes() != null && !search.getTypes().isEmpty()) {       //has types
                 for (String type : search.getTypes()) {         //Go through each type
                     //For each recipe matching that type, add it if has keyword
-                    toKeep.addAll(recipeRepository.findByTypesContaining(type));
-                    valid.retainAll(toKeep);     //Get rid of anything not having this type
+                    for(Recipe r : recipeRepository.findByTypesContaining(type)) {
+                        toKeep.put(r.hashCode(), r);
+                    }
+                    valid.retainAll(toKeep.values());     //Get rid of anything not having this type
                     toKeep.clear();
                 }
             }
@@ -315,16 +317,16 @@ public class RecipeService {
         for(Inventory i : p.getInventory()) {
             inventory.put(i.getIngredient().hashCode(), i.getIngredient());
         }
-        List<Recipe> toRemove = new ArrayList<>();
+        Map<Integer, Recipe> toRemove = new HashMap<>();
         for(Recipe r : valid) {
             for(RInventory i : r.getInv()) {
                 if(!inventory.containsKey(i.getIngredient().hashCode())) {
-                    toRemove.add(r);
+                    toRemove.put(r.hashCode(), r);
                     break;
                 }
             }
         }
-        valid.removeAll(toRemove);
+        valid.removeAll(toRemove.values());
     }
 
 
