@@ -46,4 +46,9 @@ public class FRecipeService {
             }
         }
     }
+
+    public void removeRecipeFromAllFavorites(Integer recipeId) {
+        List<FRecipe> fRecipes = fRecipeRepository.findByRecipeId(recipeId);
+        fRecipeRepository.delete(fRecipes);
+    }
 }

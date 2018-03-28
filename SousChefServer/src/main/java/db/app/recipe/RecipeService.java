@@ -6,6 +6,8 @@ import db.app.ingredient.IngredientService;
 import db.app.inventory.Inventory;
 import db.app.person.Person;
 import db.app.person.PersonService;
+import db.app.recipeFavorite.FRecipe;
+import db.app.recipeFavorite.FRecipeService;
 import db.app.recipeSteps.RecipeSteps;
 import db.app.recipeSteps.RecipeStepsService;
 import db.app.review.Review;
@@ -33,6 +35,8 @@ public class RecipeService {
     private RecipeStepsService recipeStepsService;
     @Autowired
     private ReviewService reviewService;
+    @Autowired
+    private FRecipeService fRecipeService;
 
     /**
      * Returns every Recipe in the database
@@ -115,6 +119,7 @@ public class RecipeService {
         recipeStepsService.deleteRecipeSteps(recipeId);
         for(Review review : r.getReviews())
             reviewService.deleteReview(review.getId());
+        fRecipeService.removeRecipeFromAllFavorites(recipeId);
         recipeRepository.delete(recipeId);
         personService.updatePerson(person, person.getId());
     }
@@ -146,12 +151,28 @@ public class RecipeService {
      * @param inventory      The skeleton of the RInventory (having only amount set)
      * @param ingredientName The name of the ingredient to insert
      */
+    @Deprecated
     public void addIngredientToRecipe(Integer recipeId, RInventory inventory, String ingredientName) {
         Recipe recipe = recipeRepository.findOne(recipeId);
         Ingredient i = ingredientService.getIngredient(ingredientName);
         if (i == null)
             return;
         inventory.setIngredient(i);       //set the ingredient properly
+        inventory.setRecipe(recipe);
+        recipe.setCreatedDate(new Date());
+        rInventoryRepository.save(inventory);
+    }
+
+    /**
+     * Inserts an ingredient into the recipe
+     *
+     * @param recipeId       The recipe to add to
+     * @param inventory      The skeleton of the RInventory (having only amount and ingredient set)
+     */
+    public void addIngredientToRecipe(Integer recipeId, RInventory inventory) {
+        Recipe recipe = recipeRepository.findOne(recipeId);
+        if (inventory.getIngredient() == null)
+            return;
         inventory.setRecipe(recipe);
         recipe.setCreatedDate(new Date());
         rInventoryRepository.save(inventory);
@@ -305,4 +326,6 @@ public class RecipeService {
         }
         valid.removeAll(toRemove);
     }
+
+
 }
