@@ -29,9 +29,6 @@ public class Review {
     private String description;
 
     private Date date;
-    //TODO increment and decrement the Recipe's numReviews
-    //TODO update average rating
-    //TODO Creation Date, see Person or Recipe class for how to store current Date
 
     public Review(){
 
