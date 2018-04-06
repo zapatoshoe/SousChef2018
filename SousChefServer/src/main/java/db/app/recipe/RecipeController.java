@@ -13,11 +13,20 @@ public class RecipeController {
     private RecipeService recipeService;
 
 
+    /**
+     * Returns a comprehensive list of all Recipes in the database
+     * @return A comprehensive list of all Recipes in the database
+     */
     @RequestMapping("/all")
     public List<Recipe> getAllRecipes() {
         return recipeService.getAllRecipes();
     }
 
+    /**
+     * Gets a specific Recipe from the database
+     * @param recipeId The id of the Recipe to retrieve
+     * @return The specific Recipe from the database
+     */
     @RequestMapping("/get/{recipeId}")
     public Recipe getRecipe(@PathVariable Integer recipeId) {
         return recipeService.getRecipe(recipeId);
