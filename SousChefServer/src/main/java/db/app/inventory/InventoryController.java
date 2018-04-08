@@ -36,8 +36,9 @@ public class InventoryController {
         inventoryService.addToInventory(ownerId, ingredientName);
     }
 
+    @RequestMapping
     public void addListToInventory(){
-        
+
     }
 
     /**
