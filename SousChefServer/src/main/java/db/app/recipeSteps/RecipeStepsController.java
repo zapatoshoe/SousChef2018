@@ -53,6 +53,11 @@ public class RecipeStepsController {
         recipeStepsService.addStepToRecipe(recipeId, stepNumber, step);
     }
 
+
+    public void addListOfSteps(){
+
+    }
+
     /**
      * Updates a current recipe step without changing its step number
      * @param recipeStepId the ID of the recipe step to be updated

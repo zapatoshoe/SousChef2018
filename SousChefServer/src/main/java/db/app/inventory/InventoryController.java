@@ -36,6 +36,10 @@ public class InventoryController {
         inventoryService.addToInventory(ownerId, ingredientName);
     }
 
+    public void addListToInventory(){
+        
+    }
+
     /**
      * Removes an ingredient from a peron's inventory
      * @param ownerId the ID of the person to remove the ingredient from
