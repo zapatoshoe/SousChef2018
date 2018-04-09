@@ -85,4 +85,7 @@ public class PersonController {
 		return personService.validLogin(person);
 	}
 
+	@RequestMapping(method=RequestMethod.POST, value = "/check")
+	public Person checkEmail(@RequestBody Person person) {return personService.checkEmail(person);}
+
 }

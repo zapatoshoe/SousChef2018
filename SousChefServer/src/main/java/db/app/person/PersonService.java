@@ -135,4 +135,13 @@ public class PersonService {
 		return new Person();
 	}
 
+    public Person checkEmail(Person person) {
+		Person actual;
+		List<Person> people = personRepository.findByEmail(person.getEmail());
+		if(people == null || people.size() < 1)
+			return new Person();
+		actual = people.get(0);
+		actual.setVerbose(false);
+		return actual;
+    }
 }
