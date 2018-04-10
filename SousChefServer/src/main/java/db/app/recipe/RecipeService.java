@@ -6,9 +6,7 @@ import db.app.ingredient.IngredientService;
 import db.app.inventory.Inventory;
 import db.app.person.Person;
 import db.app.person.PersonService;
-import db.app.recipeFavorite.FRecipe;
 import db.app.recipeFavorite.FRecipeService;
-import db.app.recipeSteps.RecipeSteps;
 import db.app.recipeSteps.RecipeStepsService;
 import db.app.review.Review;
 import db.app.review.ReviewService;
@@ -96,8 +94,6 @@ public class RecipeService {
         Helpers.convertStringToBlob(recipe);
         Recipe ret = recipeRepository.save(recipe);
         ret.setVerbose(false);
-        if(ret == null)     //if there were errors saving the recipe
-            return new Recipe();
         person.setNumRecipes(person.getNumRecipes() + 1);
         personService.updatePerson(person, person.getId());
         return ret;
