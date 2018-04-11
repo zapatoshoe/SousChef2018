@@ -53,9 +53,19 @@ public class RecipeStepsController {
         recipeStepsService.addStepToRecipe(recipeId, stepNumber, step);
     }
 
-
-    public void addListOfSteps(){
-
+    /**
+     * Adds a list of RecipeSteps to a recipe
+     * @param recipeId the ID of the recipe the steps are to be added to
+     * @param steps the list of RecipeSteps
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "/recipe/{recipeId}/addall")
+    public void addAllStepsToRecipe(@PathVariable Integer recipeId, @RequestBody List<RecipeSteps> steps){
+        if(steps == null || steps.isEmpty()){
+            return;
+        }
+        for(RecipeSteps s: steps){
+            recipeStepsService.addRecipeStep(recipeId, s);
+        }
     }
 
     /**
