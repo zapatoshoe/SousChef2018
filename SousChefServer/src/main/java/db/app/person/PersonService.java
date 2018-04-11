@@ -1,5 +1,11 @@
 package db.app.person;
 
+import db.app.inventory.Inventory;
+import db.app.inventory.InventoryService;
+import db.app.recipe.Recipe;
+import db.app.recipe.RecipeService;
+import db.app.review.Review;
+import db.app.review.ReviewService;
 import db.app.util.Helpers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +19,12 @@ import java.util.List;
 public class PersonService {
 	@Autowired
 	private PersonRepository personRepository;
+	@Autowired
+	private RecipeService recipeService;
+	@Autowired
+	private ReviewService reviewService;
+	@Autowired
+	private InventoryService inventoryService;
 
 	/**
 	 * Returns the person with corresponding id, null if not found
@@ -21,7 +33,23 @@ public class PersonService {
 	 */
 	public Person getPerson(Integer id) {
 		Person me = personRepository.findOne(id);
-		return me == null ? new Person() : me;
+		if(me == null)
+			return new Person();
+		else {
+			me.setVerbose(true);
+			return me;
+		}
+	}
+
+
+	public Person getPersonPreview(Integer id) {
+		Person me = personRepository.findOne(id);
+		if(me == null)
+			return new Person();
+		else {
+			me.setVerbose(false);
+			return me;
+		}
 	}
 
 	/**
@@ -30,7 +58,10 @@ public class PersonService {
 	 */
 	public List<Person> getAllPersons() {
 		List<Person> l = new ArrayList<>();
-		personRepository.findAll().forEach(l::add);
+		for(Person p : personRepository.findAll()) {
+			p.setVerbose(false);
+			l.add(p);
+		}
 		return l;
 	}
 
@@ -64,6 +95,8 @@ public class PersonService {
 			actual.setName(person.getName());
 		if(person.getType() != null)
 			actual.setType(person.getType());
+		if(person.getPassword() != null)
+			actual.setPassword(person.getPassword());
 		Helpers.convertStringToBlob(actual);
 		personRepository.save(actual);	//same as add but repository knows to update existing rows
 	}
@@ -73,7 +106,13 @@ public class PersonService {
 	 * @param id The id of the person to remove
 	 */
 	public void deletePerson(Integer id) {
-			personRepository.delete(id);
+		Person toDelete = personRepository.findOne(id);
+		for(Recipe r : toDelete.getRecipes())
+			recipeService.deleteRecipe(r.getId());
+		for(Review r : toDelete.getReviews())
+			reviewService.deleteReview(r.getId());
+		inventoryService.deleteAllInventory(id);
+		personRepository.delete(id);
 	}
 
 	/**
@@ -90,6 +129,7 @@ public class PersonService {
 		if(actual.getPassword().equals(person.getPassword())) {
 			actual.setLastLogin(new Date());
 			personRepository.save(actual);
+			actual.setVerbose(true);
 			return actual;
 		}
 		return new Person();

@@ -3,8 +3,15 @@ package db.app.recipe;
 import db.app.SousChefServer;
 import db.app.ingredient.Ingredient;
 import db.app.ingredient.IngredientService;
+import db.app.inventory.Inventory;
 import db.app.person.Person;
 import db.app.person.PersonService;
+import db.app.recipeFavorite.FRecipe;
+import db.app.recipeFavorite.FRecipeService;
+import db.app.recipeSteps.RecipeSteps;
+import db.app.recipeSteps.RecipeStepsService;
+import db.app.review.Review;
+import db.app.review.ReviewService;
 import db.app.util.Helpers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +31,12 @@ public class RecipeService {
     private RInventoryRepository rInventoryRepository;
     @Autowired
     private IngredientService ingredientService;
+    @Autowired
+    private RecipeStepsService recipeStepsService;
+    @Autowired
+    private ReviewService reviewService;
+    @Autowired
+    private FRecipeService fRecipeService;
 
     /**
      * Returns every Recipe in the database
@@ -72,17 +85,22 @@ public class RecipeService {
      * @param ownerId The Owner of the recipe
      * @param recipe  The recipe to insert
      */
-    public void addRecipe(Integer ownerId, Recipe recipe) {
+    public Recipe addRecipe(Integer ownerId, Recipe recipe) {
         Person person = personService.getPerson(ownerId);
         if (person == null)
-            return;
+            return new Recipe();
         recipe.setOwner(person);    //ensure properly setting the person field
         recipe.setCreatedDate(new Date());
         recipe.setNumReviews(0);
+        recipe.setAverageRating((float)0);
+        Helpers.convertStringToBlob(recipe);
         Recipe ret = recipeRepository.save(recipe);
+        ret.setVerbose(false);
         if(ret == null)     //if there were errors saving the recipe
-            return;
+            return new Recipe();
         person.setNumRecipes(person.getNumRecipes() + 1);
+        personService.updatePerson(person, person.getId());
+        return ret;
     }
 
     /**
@@ -96,7 +114,14 @@ public class RecipeService {
             return;
         Person person = r.getOwner();
         person.setNumRecipes(person.getNumRecipes() - 1);
+        for(RInventory ri : r.getInv())
+            rInventoryRepository.delete(ri.getId());
+        recipeStepsService.deleteRecipeSteps(recipeId);
+        for(Review review : r.getReviews())
+            reviewService.deleteReview(review.getId());
+        fRecipeService.removeRecipeFromAllFavorites(recipeId);
         recipeRepository.delete(recipeId);
+        personService.updatePerson(person, person.getId());
     }
 
     /**
@@ -111,9 +136,11 @@ public class RecipeService {
             return;
         old.setTime(newRecipe.getTime());
         old.setDescription(newRecipe.getDescription());
-        old.setTime(newRecipe.getTime());
         old.setTitle(newRecipe.getTitle());
         old.setTypes(newRecipe.getTypes());
+        old.setImage(newRecipe.getImage());
+        old.setCreatedDate(new Date());
+        Helpers.convertStringToBlob(old);
         recipeRepository.save(old);
     }
 
@@ -124,6 +151,7 @@ public class RecipeService {
      * @param inventory      The skeleton of the RInventory (having only amount set)
      * @param ingredientName The name of the ingredient to insert
      */
+    @Deprecated
     public void addIngredientToRecipe(Integer recipeId, RInventory inventory, String ingredientName) {
         Recipe recipe = recipeRepository.findOne(recipeId);
         Ingredient i = ingredientService.getIngredient(ingredientName);
@@ -131,6 +159,22 @@ public class RecipeService {
             return;
         inventory.setIngredient(i);       //set the ingredient properly
         inventory.setRecipe(recipe);
+        recipe.setCreatedDate(new Date());
+        rInventoryRepository.save(inventory);
+    }
+
+    /**
+     * Inserts an ingredient into the recipe
+     *
+     * @param recipeId       The recipe to add to
+     * @param inventory      The skeleton of the RInventory (having only amount and ingredient set)
+     */
+    public void addIngredientToRecipe(Integer recipeId, RInventory inventory) {
+        Recipe recipe = recipeRepository.findOne(recipeId);
+        if (inventory.getIngredient() == null)
+            return;
+        inventory.setRecipe(recipe);
+        recipe.setCreatedDate(new Date());
         rInventoryRepository.save(inventory);
     }
 
@@ -160,6 +204,7 @@ public class RecipeService {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+                recipe.setCreatedDate(new Date());
                 return;
             }
         }
@@ -189,10 +234,12 @@ public class RecipeService {
         for (Recipe r : valid) {
             if (r.getTime() > maxTime)
                 toRemove.add(r);
-//            else if (r.getStarRating() < minStars)    //TODO
-//                toRemove.add(r);
+            else if (r.getAverageRating() < minStars)
+                toRemove.add(r);
         }
         valid.removeAll(toRemove);
+        if(search.getCheckInventory() != null && search.getCheckInventory())
+            filterByInventory(search.getOwnerId(), valid);
         //Sort by star rating then total time
         valid.sort(Recipe.RecipeComparator);
         return valid;
@@ -205,7 +252,7 @@ public class RecipeService {
      * @param valid  The original list of valid Recipes to be modified
      */
     private void filterKeywordsAndTypes(final Search search, List<Recipe> valid) {
-        List<Recipe> toKeep = new ArrayList<>();
+        Map<Integer, Recipe> toKeep = new HashMap<>();
         /*
         4 scenarios
         1.) Has keywords and types
@@ -217,38 +264,70 @@ public class RecipeService {
             if (search.getTypes() != null && !search.getTypes().isEmpty()) {       //has keyword and types
                 for (String type : search.getTypes()) {         //Go through each type
                     for (Recipe r : recipeRepository.findByTypesContaining(type)) {       //For each recipe matching that type, add it if has the keywords
-                        toKeep.add(r);
+                        toKeep.put(r.hashCode(), r);
                         for (String s : search.getKeywords()) {
                             //if it is missing any of the keywords, remove it
                             if (!(Helpers.containsIgnoreCase(r.getTitle(), s) || Helpers.containsIgnoreCase(r.getDescription(), s))) {
-                                toKeep.remove(r);
+                                toKeep.remove(r.hashCode(), r);
                                 break;
                             }
                         }
                     }
-                    valid.retainAll(toKeep);     //Get rid of anything not having this type
+                    valid.retainAll(toKeep.values());     //Get rid of anything not having this type
+                    toKeep.clear();             //Clear toKeep to contain only those with the next type
                 }
             } else {                //doesn't have types
                 for (Recipe r : valid) {
-                    toKeep.add(r);
+                    toKeep.put(r.hashCode(), r);
                     for (String s : search.getKeywords()) {
                         //if it is missing any of the keywords, remove it
                         if (!(Helpers.containsIgnoreCase(r.getTitle(), s) || Helpers.containsIgnoreCase(r.getDescription(), s))) {
-                            toKeep.remove(r);
+                            toKeep.remove(r.hashCode(), r);
                             break;
                         }
                     }
                 }
-                valid.retainAll(toKeep);
+                valid.retainAll(toKeep.values());
             }
         } else {    //doesn't have keywords
             if (search.getTypes() != null && !search.getTypes().isEmpty()) {       //has types
                 for (String type : search.getTypes()) {         //Go through each type
                     //For each recipe matching that type, add it if has keyword
-                    toKeep.addAll(recipeRepository.findByTypesContaining(type));
-                    valid.retainAll(toKeep);     //Get rid of anything not having this type
+                    for(Recipe r : recipeRepository.findByTypesContaining(type)) {
+                        toKeep.put(r.hashCode(), r);
+                    }
+                    valid.retainAll(toKeep.values());     //Get rid of anything not having this type
+                    toKeep.clear();
                 }
             }
         }
     }
+
+    /**
+     * Removes any Recipe r from valid if Person owner with id ownerId doesn't have
+     * all of the Ingredients for the Recipe r
+     * @param ownerId The id of the owner whose inventory we want to check
+     * @param valid The List of currently valid Recipes
+     */
+    private void filterByInventory(Integer ownerId, List<Recipe> valid) {
+        if(ownerId == null)
+            return;
+        Person p = personService.getPerson(ownerId);
+        Map<Integer, Ingredient> inventory = new HashMap<>();
+        for(Inventory i : p.getInventory()) {
+            inventory.put(i.getIngredient().hashCode(), i.getIngredient());
+        }
+        Map<Integer, Recipe> toRemove = new HashMap<>();
+        for(Recipe r : valid) {
+            for(RInventory i : r.getInv()) {
+                if(!inventory.containsKey(i.getIngredient().hashCode())) {
+                    toRemove.put(r.hashCode(), r);
+                    break;
+                }
+            }
+        }
+        valid.removeAll(toRemove.values());
+    }
+
+
 }

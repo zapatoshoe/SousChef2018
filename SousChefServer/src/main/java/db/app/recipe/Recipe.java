@@ -3,6 +3,7 @@ package db.app.recipe;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import db.app.person.Person;
 import db.app.recipeSteps.RecipeSteps;
+import db.app.review.Review;
 import db.app.util.ImageAndPicture;
 
 import javax.persistence.*;
@@ -44,13 +45,12 @@ public class Recipe implements ImageAndPicture {
     @Transient
     private boolean verbose;
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<RInventory> inv;
-
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<RecipeSteps> steps;
-//    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Review> reviews;
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Review> reviews;
 
     public Integer getId() {
         return id;
@@ -164,22 +164,24 @@ public class Recipe implements ImageAndPicture {
         this.steps = steps;
     }
 
+    public List<Review> getReviews() {
+        return reviews;
+    }
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
 
-    //Compare by star rating, then total time
-    //    }
-//    public List<Review> getReviews() {
-//        this.reviews = reviews;
-//    public void setReviews(List<Review> reviews) {
-//    }
-//        return reviews;
-//    }
+    public int hashCode() {
+        return id;
+    }
+
     public static Comparator<Recipe> RecipeComparator = (o1, o2) -> {
         if (o1.getAverageRating() > o2.getAverageRating())
             return -1;
         else if (o1.getAverageRating() < o2.getAverageRating())
             return 1;
         else {
-            if(o1.getTime() == o2.getTime())
+            if(o1.getTime().equals(o2.getTime()))
                 return 0;
             else
                 return o1.getTime() > o2.getTime() ? 1 : -1;

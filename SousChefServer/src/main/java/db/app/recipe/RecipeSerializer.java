@@ -55,7 +55,7 @@ public class RecipeSerializer extends StdSerializer<Recipe> {
                     jgen.writeEndObject();                                                  //},
                 }
                 jgen.writeEndArray();
-//                for (Review review : recipe.getReviews()) {       //TODO
+//                for (Review review : recipe.getReviews()) {       //TODO Do we want to send the Reviews here?
 //                    jgen.writeStartObject();
 //                    jgen.writeNumberField("id", review.getId());
 //                    jgen.writeNumberField("stepNumber", step.getStepNumber());

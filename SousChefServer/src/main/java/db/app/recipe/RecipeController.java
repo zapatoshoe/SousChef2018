@@ -13,11 +13,20 @@ public class RecipeController {
     private RecipeService recipeService;
 
 
+    /**
+     * Returns a comprehensive list of all Recipes in the database
+     * @return A comprehensive list of all Recipes in the database
+     */
     @RequestMapping("/all")
     public List<Recipe> getAllRecipes() {
         return recipeService.getAllRecipes();
     }
 
+    /**
+     * Gets a specific Recipe from the database
+     * @param recipeId The id of the Recipe to retrieve
+     * @return The specific Recipe from the database
+     */
     @RequestMapping("/get/{recipeId}")
     public Recipe getRecipe(@PathVariable Integer recipeId) {
         return recipeService.getRecipe(recipeId);
@@ -39,8 +48,8 @@ public class RecipeController {
      * recipe assumed to have these fields set already - Title, Description, CookMins, PrepMins, Type, ownerId
      */
     @RequestMapping(method = RequestMethod.POST, value = "/{ownerId}")
-    public void addRecipe(@PathVariable Integer ownerId, @RequestBody Recipe recipe) {
-        recipeService.addRecipe(ownerId, recipe);
+    public Recipe addRecipe(@PathVariable Integer ownerId, @RequestBody Recipe recipe) {
+        return recipeService.addRecipe(ownerId, recipe);
     }
 
     /**
@@ -69,8 +78,33 @@ public class RecipeController {
      * @param ingredientName The name of the ingredient to add to that recipe
      */
     @RequestMapping(method = RequestMethod.PUT, value = "/{recipeId}/{ingredientName}")
+    @Deprecated
     public void addToRecipe(@PathVariable Integer recipeId, @PathVariable String ingredientName, @RequestBody RInventory inventory) {
         recipeService.addIngredientToRecipe(recipeId, inventory, ingredientName);
+    }
+
+    /**
+     * Inserts the specified ingredient into the specified recipe
+     * @param inventory The inventory with the amount and ingredient specified
+     * @param recipeId The recipe to add the ingredient to
+     */
+    @RequestMapping(method = RequestMethod.PUT, value = "/{recipeId}/add")
+    public void addToRecipe(@PathVariable Integer recipeId, @RequestBody RInventory inventory) {
+        recipeService.addIngredientToRecipe(recipeId, inventory);
+    }
+
+
+
+    /**
+     * Inserts all of the Ingredients into the specified recipe
+     * @param recipeId The id of the Recipe to add ingredients to
+     * @param inventories List of all the items to add in the Recipe
+     */
+    @RequestMapping(method = RequestMethod.PUT, value = "/{recipeId}/addall")
+    public void addAllToRecipe(@PathVariable Integer recipeId, @RequestBody List<RInventory> inventories) {
+        for(RInventory r : inventories) {
+            recipeService.addIngredientToRecipe(recipeId, r);
+        }
     }
 
     /**
