@@ -1,6 +1,5 @@
 package db.app.person;
 
-import db.app.inventory.Inventory;
 import db.app.inventory.InventoryService;
 import db.app.recipe.Recipe;
 import db.app.recipe.RecipeService;
@@ -116,7 +115,7 @@ public class PersonService {
 	}
 
 	/**
-	 * Returns true if the specified person has the correct password
+	 * Returns the Person if the specified person has the correct password, uninitialized person otherwise
 	 * @param person The person in question
 	 * @return The complete person if good login, an uninitialized person otherwise
 	 */
@@ -135,4 +134,18 @@ public class PersonService {
 		return new Person();
 	}
 
+	/**
+	 * Returns the Person with that email if the email exists
+	 * @param person The Person having the email to check
+	 * @return An uninitialized Person if no email found, the Person having that email otherwise
+	 */
+    public Person checkEmail(Person person) {
+		Person actual;
+		List<Person> people = personRepository.findByEmail(person.getEmail());
+		if(people == null || people.size() < 1)
+			return new Person();
+		actual = people.get(0);
+		actual.setVerbose(false);
+		return actual;
+    }
 }

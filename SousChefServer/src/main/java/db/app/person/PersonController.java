@@ -85,4 +85,12 @@ public class PersonController {
 		return personService.validLogin(person);
 	}
 
+	/**
+	 * Returns the Person with that email if the email exists
+	 * @param person The Person having the email to check
+	 * @return An uninitialized Person if no email found, the Person having that email otherwise
+	 */
+	@RequestMapping(method=RequestMethod.POST, value = "/check")
+	public Person checkEmail(@RequestBody Person person) {return personService.checkEmail(person);}
+
 }

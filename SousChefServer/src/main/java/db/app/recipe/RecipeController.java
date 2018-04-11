@@ -119,7 +119,6 @@ public class RecipeController {
 
     /**
      * Returns a List of Recipes meeting the specified search parameters
-     *
      * @param arr An array of size 1 holding the parameters to compare Recipes to
      * @return A List of Recipes meeting the specified search parameters
      */

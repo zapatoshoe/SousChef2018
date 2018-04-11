@@ -3,13 +3,9 @@ package db.app.person;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import db.app.inventory.Inventory;
-import db.app.inventory.InventorySerializer;
-import db.app.review.Review;
 import db.app.util.Helpers;
 
-import java.io.*;
-import java.sql.Blob;
+import java.io.IOException;
 
 public class PersonSerializer extends StdSerializer<Person> {
 
@@ -26,26 +22,14 @@ public class PersonSerializer extends StdSerializer<Person> {
         Helpers.prepForSerialization(person);  //Converts picture from Blob to image as String
         jgen.writeStartObject();    //{
         jgen.writeNumberField("id", person.getId());    //"id": person.getId,
+        if(person.getId() == -1) {
+            jgen.writeEndObject();
+            return;
+        }
         jgen.writeStringField("name", person.getName());    //"name": "person.getName()",
         jgen.writeStringField("email", person.getEmail());  //"email": "person.getEmail()",
         jgen.writeStringField("type", person.getType());    //"type": "person.getType()",
         jgen.writeNumberField("averageRating", person.getAverageRating());
-//        jgen.writeFieldName("reviews");
-//        jgen.writeStartArray();       //TODO ask if we want to send Reviews with a person or not
-//        if(person.isVerbose()) {
-//                if(person.getReviews() != null) {
-//                    for(Review review : person.getReviews()) {
-//                        jgen.writeStartObject();
-//                        jgen.writeNumberField("id", review.getId());
-//                        jgen.writeNumberField("rating", review.getRating());
-//                        jgen.writeStringField("title", review.getTitle());
-//                        jgen.writeStringField("description", review.getDescription());
-//                        jgen.writeStringField("date", review.getDate().toString());
-//                        jgen.writeEndObject();
-//                    }
-//                }
-//        }
-//        jgen.writeEndArray();
         if(person.isVerbose())
             jgen.writeStringField("image", person.getImage());  //"image": "person.getImage()",
         else
