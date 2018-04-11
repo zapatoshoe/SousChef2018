@@ -2,10 +2,7 @@ package db.app.inventory;
 
 import db.app.ingredient.Ingredient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,9 +33,19 @@ public class InventoryController {
         inventoryService.addToInventory(ownerId, ingredientName);
     }
 
-    @RequestMapping
-    public void addListToInventory(){
-
+    /**
+     * Add a list of ingredients to a user's inventory
+     * @param ownerId the ID of the person to have the ingredients added
+     * @param ingredients list of ingredients to be added to inventory
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "/{ownerId}/addall")
+    public void addAllToInventory(@PathVariable Integer ownerId, @RequestBody List<Ingredient> ingredients){
+        if(ingredients == null || ingredients.isEmpty()){
+            return;
+        }
+        for(Ingredient i: ingredients){
+            inventoryService.addToInventory(ownerId, i.getName());
+        }
     }
 
     /**
