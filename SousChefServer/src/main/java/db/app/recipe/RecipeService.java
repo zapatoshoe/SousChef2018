@@ -91,6 +91,7 @@ public class RecipeService {
         recipe.setCreatedDate(new Date());
         recipe.setNumReviews(0);
         recipe.setAverageRating((float)0);
+        recipe.setTypes(recipe.getTypes().replace(" ", ""));
         Helpers.convertStringToBlob(recipe);
         Recipe ret = recipeRepository.save(recipe);
         ret.setVerbose(false);
@@ -204,6 +205,46 @@ public class RecipeService {
                 return;
             }
         }
+    }
+
+    public List<Recipe> recommendRecipes(Integer ownerId) {
+        Search search = new Search();
+        search.setStarRating(4.5f);
+        List<Recipe> favorites = fRecipeService.getFavorites(ownerId);
+        if(favorites.size() < 1)
+            return new ArrayList<>();
+        ArrayList<String> types = new ArrayList<>();
+        ArrayList<Integer> counts = new ArrayList<>();
+        for(Recipe r : favorites) {                             //loop to count number of occurrences of type in favorites
+            for(String s : r.getTypes().split(",")) {       //get each type
+                int i = types.indexOf(s);
+                if(i >= 0) {
+                    counts.set(i, counts.get(i) + 1);   //increment count
+                } else {
+                    types.add(s);                       //add it to the list
+                    counts.add(1);                      //set it to one count
+                }
+            }
+        }
+        int maxIndex = 0;
+        int maxCount = counts.get(0);
+        for(int i=1; i<types.size(); i++) {
+            if(counts.get(i) > maxCount) {
+                maxIndex = i;
+                maxCount = counts.get(i);
+            }
+        }
+        List<String> l = new ArrayList<>();
+        l.add(types.get(maxIndex));
+        search.setTypes(l);
+        List<Recipe> recommended;
+        do {
+            recommended = search(search);
+            search.setStarRating((float) (search.getStarRating() - .5));       //decrease max rating by .5 and try again
+            recommended.removeAll(favorites);
+            recommended.removeAll(getPersonRecipes(ownerId));
+        }while(recommended.size() < 4);
+        return recommended;
     }
 
     /**
@@ -324,6 +365,7 @@ public class RecipeService {
         }
         valid.removeAll(toRemove.values());
     }
+
 
 
 }
