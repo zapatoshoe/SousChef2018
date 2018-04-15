@@ -117,6 +117,11 @@ public class RecipeController {
         recipeService.removeIngredientFromRecipe(recipeId, ingredientName);
     }
 
+    @RequestMapping("/{ownerId}")
+    public List<Recipe> recommendRecipes(@PathVariable Integer ownerId) {
+        return recipeService.recommendRecipes(ownerId);
+    }
+
     /**
      * Returns a List of Recipes meeting the specified search parameters
      * @param arr An array of size 1 holding the parameters to compare Recipes to
