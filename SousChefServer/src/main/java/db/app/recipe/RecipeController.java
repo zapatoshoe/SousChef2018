@@ -117,7 +117,7 @@ public class RecipeController {
         recipeService.removeIngredientFromRecipe(recipeId, ingredientName);
     }
 
-    @RequestMapping("/{ownerId}")
+    @RequestMapping("/recommend/{ownerId}")
     public List<Recipe> recommendRecipes(@PathVariable Integer ownerId) {
         return recipeService.recommendRecipes(ownerId);
     }

@@ -91,6 +91,7 @@ public class RecipeService {
         recipe.setCreatedDate(new Date());
         recipe.setNumReviews(0);
         recipe.setAverageRating((float)0);
+        recipe.setTypes(recipe.getTypes().replace(" ", ""));
         Helpers.convertStringToBlob(recipe);
         Recipe ret = recipeRepository.save(recipe);
         ret.setVerbose(false);
@@ -208,15 +209,16 @@ public class RecipeService {
 
     public List<Recipe> recommendRecipes(Integer ownerId) {
         Search search = new Search();
-        search.setStarRating(4.0f);
-
+        search.setStarRating(4.5f);
         List<Recipe> favorites = fRecipeService.getFavorites(ownerId);
+        if(favorites.size() < 1)
+            return new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
         ArrayList<Integer> counts = new ArrayList<>();
         for(Recipe r : favorites) {                             //loop to count number of occurrences of type in favorites
             for(String s : r.getTypes().split(",")) {       //get each type
                 int i = types.indexOf(s);
-                if(i > 0) {
+                if(i >= 0) {
                     counts.set(i, counts.get(i) + 1);   //increment count
                 } else {
                     types.add(s);                       //add it to the list
