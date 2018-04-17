@@ -67,9 +67,6 @@ public class Search {
         this.keywords = keywords;
     }
 
-    public Boolean checkInventory() {
-        return checkInventory;
-    }
     public void setCheckInventory(Boolean checkInventory) {
         this.checkInventory = checkInventory;
     }

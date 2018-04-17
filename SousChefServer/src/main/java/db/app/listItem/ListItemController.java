@@ -35,6 +35,8 @@ public class ListItemController {
         return listItemService.addToUserList(ownerId, item);
     }
 
+    //TODO bulk add items from recipe to shopping list - check inventory and shopping list
+
     /**
      * Updates the fields of the ListItem in the database with itemId
      * to the specified fields
