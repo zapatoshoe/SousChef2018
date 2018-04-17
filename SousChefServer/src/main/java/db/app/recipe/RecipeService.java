@@ -213,6 +213,8 @@ public class RecipeService {
         List<Recipe> favorites = fRecipeService.getFavorites(ownerId);
         if(favorites.size() < 1)
             return new ArrayList<>();
+        List<Recipe> ownedAndFavorited = getPersonRecipes(ownerId);
+        ownedAndFavorited.addAll(favorites);
         ArrayList<String> types = new ArrayList<>();
         ArrayList<Integer> counts = new ArrayList<>();
         for(Recipe r : favorites) {                             //loop to count number of occurrences of type in favorites
@@ -226,8 +228,7 @@ public class RecipeService {
                 }
             }
         }
-        int maxIndex = 0;
-        int maxCount = counts.get(0);
+        int maxIndex = 0, maxCount = counts.get(0);
         for(int i=1; i<types.size(); i++) {
             if(counts.get(i) > maxCount) {
                 maxIndex = i;
@@ -241,9 +242,10 @@ public class RecipeService {
         do {
             recommended = search(search);
             search.setStarRating((float) (search.getStarRating() - .5));       //decrease max rating by .5 and try again
-            recommended.removeAll(favorites);
-            recommended.removeAll(getPersonRecipes(ownerId));
-        }while(recommended.size() < 4);
+            recommended.removeAll(ownedAndFavorited);
+        } while(recommended.size() < 4 && search.getStarRating() > -.5);
+        for(Recipe r : recommended)
+            r.setVerbose(false);
         return recommended;
     }
 

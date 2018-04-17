@@ -23,6 +23,7 @@ public class RecipeSerializer extends StdSerializer<Recipe> {
             Helpers.prepForSerialization(recipe);
             jgen.writeStartObject();                                                    //{
             jgen.writeNumberField("id", recipe.getId());                        //"id": "recipe.getId()",
+            jgen.writeStringField("ownerName", recipe.getOwner().getName());
             jgen.writeStringField("title", recipe.getTitle());                  //"title": "recipe.getTitle()",
             jgen.writeStringField("description", recipe.getDescription());      //"description": recipe.getDescription()",
             jgen.writeNumberField("time", recipe.getTime());            //"cookMins": recipe.getCookMins(),
