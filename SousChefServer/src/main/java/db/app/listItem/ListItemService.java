@@ -4,6 +4,9 @@ import db.app.ingredient.Ingredient;
 import db.app.ingredient.IngredientService;
 import db.app.person.Person;
 import db.app.person.PersonService;
+import db.app.recipe.RInventory;
+import db.app.recipe.Recipe;
+import db.app.recipe.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,8 @@ public class ListItemService {
     private PersonService personService;
     @Autowired
     private IngredientService ingredientService;
+    @Autowired
+    private RecipeService recipeService;
 
     /**
      * Returns all items for a specific Person
@@ -47,8 +52,25 @@ public class ListItemService {
         Ingredient ingredient = ingredientService.getIngredient(item.getEntry());
         item.setIngredient(ingredient);     //ingredient will either be null or the corresponding ingredient
         item.setOwner(person);
-        ListItem ret = listItemRepository.save(item);
-        return ret;
+        return listItemRepository.save(item);
+    }
+
+    public void addRecipeIngredientsToUserList(Integer ownerId, Integer recipeId) {
+        List<ListItem> shoppingList = getUserList(ownerId); //sorted Shopping List
+        Recipe recipe = recipeService.getRecipe(recipeId);
+        if(recipe == null)
+            return;
+        List<RInventory> ingredients = recipe.getInv();
+        int endOfIndex = shoppingList.isEmpty() ? 0 : shoppingList.get(shoppingList.size() - 1).getOrderNumber();    //get the largest order number to put the items at the end
+        for(RInventory i : ingredients) {
+            ListItem item = new ListItem();
+            item.setChecked(false);
+            item.setEntry(i.getIngredient().getName());
+            if(!shoppingList.contains(item)) {
+                item.setOrderNumber(++endOfIndex);
+                addToUserList(ownerId, item);
+            }
+        }
     }
 
     /**
@@ -78,7 +100,7 @@ public class ListItemService {
 
     /**
      * Deletes all ListItems for a specific Person
-     * @param ownerId
+     * @param ownerId Id of the owner
      */
     public void deleteAll(Integer ownerId) {
         List<ListItem> items = listItemRepository.findByOwnerId(ownerId);

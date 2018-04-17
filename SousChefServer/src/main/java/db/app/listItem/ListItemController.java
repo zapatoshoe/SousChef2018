@@ -35,7 +35,10 @@ public class ListItemController {
         return listItemService.addToUserList(ownerId, item);
     }
 
-    //TODO bulk add items from recipe to shopping list - check inventory and shopping list
+    @RequestMapping(method = RequestMethod.POST, value = "/{ownerId}/{recipeId}")
+    public void addRecipeIngredientsToUserList(@PathVariable Integer ownerId, @PathVariable Integer recipeId) {
+        listItemService.addRecipeIngredientsToUserList(ownerId, recipeId);
+    }
 
     /**
      * Updates the fields of the ListItem in the database with itemId

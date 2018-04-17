@@ -6,6 +6,7 @@ import db.app.person.Person;
 
 import javax.persistence.*;
 import java.util.Comparator;
+import java.util.List;
 
 @Entity
 @JsonSerialize(using = ListItemSerializer.class)
@@ -69,15 +70,14 @@ public class ListItem implements Comparable<ListItem> {
         this.checked = checked;
     }
 
+    public boolean equals(Object o) {
+        return (o instanceof ListItem) && this.getEntry().equals(((ListItem) o).getEntry());   //compare the entries to each other
+    }
+
     @Override
     public int compareTo(ListItem o) {
         return orderNumber < o.orderNumber ? -1 : 1;
     }
 
-    public static Comparator<ListItem> ListItemComparator = new Comparator<ListItem>() {
-        @Override
-        public int compare(ListItem o1, ListItem o2) {
-            return o1.compareTo(o2);
-        }
-    };
+    public static Comparator<ListItem> ListItemComparator = ListItem::compareTo;
 }
