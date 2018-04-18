@@ -34,11 +34,11 @@ public class RecipeSerializer extends StdSerializer<Recipe> {
             jgen.writeStartArray();
             if (recipe.getInv() != null) {
                 for (RInventory inv : recipe.getInv()) {
-                    jgen.writeStartObject();                                                //{
-                    Ingredient i = inv.getIngredient();
-                    jgen.writeNumberField("id", i.getId());                         //"id": i.getId(),
-                    jgen.writeStringField("name", i.getName());                     //"name": "i.getName()",
-                    jgen.writeStringField("type", i.getType().toString());          //"type": "i.getTypes()",
+                    jgen.writeStartObject();
+                    jgen.writeNumberField("id", inv.getId());                         //"id": i.getId(),
+                    jgen.writeNumberField("ingredientId", inv.getIngredientId());
+                    jgen.writeStringField("name", inv.getName());                     //"name": "i.getName()",
+//                    jgen.writeStringField("type", inv.getType().toString());          //"type": "i.getTypes()",
                     jgen.writeStringField("amount", inv.getAmount());               //"amount": "i.getAmount()"
                     jgen.writeEndObject();                                                  //},
                 }
@@ -56,14 +56,6 @@ public class RecipeSerializer extends StdSerializer<Recipe> {
                     jgen.writeEndObject();                                                  //},
                 }
                 jgen.writeEndArray();
-//                for (Review review : recipe.getReviews()) {       //TODO Do we want to send the Reviews here?
-//                    jgen.writeStartObject();
-//                    jgen.writeNumberField("id", review.getId());
-//                    jgen.writeNumberField("stepNumber", step.getStepNumber());
-//                    jgen.writeNumberField("time", step.getTime());
-//                    jgen.writeStringField("description", step.getDescription());
-//                    jgen.writeEndObject();                                                  //},
-//                }
             }
             jgen.writeStringField("createdDate", recipe.getCreatedDate().toString());
             jgen.writeStringField("image", recipe.getImage());

@@ -151,13 +151,14 @@ public class RecipeService {
     @Deprecated
     public void addIngredientToRecipe(Integer recipeId, RInventory inventory, String ingredientName) {
         Recipe recipe = recipeRepository.findOne(recipeId);
-        Ingredient i = ingredientService.getIngredient(ingredientName);
-        if (i == null)
-            return;
-        inventory.setIngredient(i);       //set the ingredient properly
+//        Ingredient i = ingredientService.getIngredient(ingredientName);
+//        if (i == null)
+//            return;
+//        inventory.setIngredient(i);       //set the ingredient properly
         inventory.setRecipe(recipe);
         recipe.setCreatedDate(new Date());
         rInventoryRepository.save(inventory);
+        recipeRepository.save(recipe);
     }
 
     /**
@@ -168,8 +169,9 @@ public class RecipeService {
      */
     public void addIngredientToRecipe(Integer recipeId, RInventory inventory) {
         Recipe recipe = recipeRepository.findOne(recipeId);
-        if (inventory.getIngredient() == null)
-            return;
+        Ingredient i = ingredientService.getIngredient(inventory.getIngredientId());
+        inventory.setName(i.getName());
+        inventory.setType(i.getType());
         inventory.setRecipe(recipe);
         recipe.setCreatedDate(new Date());
         rInventoryRepository.save(inventory);
@@ -181,6 +183,7 @@ public class RecipeService {
      * @param recipeId       The recipe to be operated on
      * @param ingredientName The ingredient to be removed
      */
+    @Deprecated
     public void removeIngredientFromRecipe(Integer recipeId, String ingredientName) {
         Recipe recipe = recipeRepository.findOne(recipeId);
         if (recipe == null)
@@ -192,7 +195,7 @@ public class RecipeService {
         if (actual == null)
             return;
         for (RInventory i : ingredients) {
-            if (i.getIngredient().equals(actual)) {
+            if (i.getIngredientId().equals(actual.getId())) {
                 try {
                     //Due to some dumbass issue, a statement must be used in order to correctly delete the RInventory
                     PreparedStatement stmt = SousChefServer.db.prepareStatement("DELETE FROM db309yt1.recipe_inventory WHERE id=?;");
@@ -205,6 +208,10 @@ public class RecipeService {
                 return;
             }
         }
+    }
+
+    public void removeIngredientFromRecipe(RInventory inventory) {
+        rInventoryRepository.delete(inventory.getId());
     }
 
     public List<Recipe> recommendRecipes(Integer ownerId) {
@@ -359,7 +366,7 @@ public class RecipeService {
         Map<Integer, Recipe> toRemove = new HashMap<>();
         for(Recipe r : valid) {
             for(RInventory i : r.getInv()) {
-                if(!inventory.containsKey(i.getIngredient().hashCode())) {
+                if(!inventory.containsKey(i.hashCode())) {
                     toRemove.put(r.hashCode(), r);
                     break;
                 }

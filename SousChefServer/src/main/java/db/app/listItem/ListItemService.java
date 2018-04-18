@@ -65,7 +65,8 @@ public class ListItemService {
         for(RInventory i : ingredients) {
             ListItem item = new ListItem();
             item.setChecked(false);
-            item.setEntry(i.getIngredient().getName());
+            Ingredient ingredient = ingredientService.getIngredient(i.getIngredientId());
+            item.setEntry(ingredient.getName());
             if(!shoppingList.contains(item)) {
                 item.setOrderNumber(++endOfIndex);
                 addToUserList(ownerId, item);

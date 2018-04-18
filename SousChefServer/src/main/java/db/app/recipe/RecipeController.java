@@ -114,8 +114,18 @@ public class RecipeController {
      * @param ingredientName The name of the ingredient to remove
      */
     @RequestMapping(method = RequestMethod.DELETE, value = "/{recipeId}/{ingredientName}")
+    @Deprecated
     public void removeFromRecipe(@PathVariable Integer recipeId, @PathVariable String ingredientName) {
         recipeService.removeIngredientFromRecipe(recipeId, ingredientName);
+    }
+
+    /**
+     * Removes the specified ingredient from the specified recipe
+     * @param inventory The RInventory (Ingredient to remove)
+     */
+    @RequestMapping(method = RequestMethod.DELETE, value = "/remove")
+    public void removeFromRecipe(@RequestBody RInventory inventory) {
+        recipeService.removeIngredientFromRecipe(inventory);
     }
 
     @RequestMapping("/recommend/{ownerId}")

@@ -25,6 +25,10 @@ public class IngredientService {
         return list.isEmpty() ? null : list.get(0);     //should only be one ingredient with that name
     }
 
+    public Ingredient getIngredient(Integer id) {
+        return ingredientRepository.findOne(id);
+    }
+
     public void addIngredient(Ingredient ingredient){
         ingredientRepository.save(ingredient);
     }

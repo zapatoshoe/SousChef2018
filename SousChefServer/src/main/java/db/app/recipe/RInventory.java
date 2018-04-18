@@ -1,6 +1,7 @@
 package db.app.recipe;
 
 import db.app.ingredient.Ingredient;
+import db.app.ingredient.IngredientType;
 
 import javax.persistence.*;
 
@@ -11,8 +12,14 @@ public class RInventory {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @ManyToOne
-    private Ingredient ingredient;
+//    @ManyToOne
+//    private Ingredient ingredient;
+    private Integer ingredientId;
+
+    private String name;
+
+    @Enumerated(EnumType.STRING)
+    private IngredientType type;
 
     private String amount;
 
@@ -27,13 +34,34 @@ public class RInventory {
         this.id = id;
     }
 
-    public Ingredient getIngredient() {
-        return ingredient;
+    public Integer getIngredientId() {
+        return ingredientId;
+    }
+    public void setIngredientId(Integer ingredientId) {
+        this.ingredientId = ingredientId;
     }
 
-    public void setIngredient(Ingredient ingredient) {
-        this.ingredient = ingredient;
+    public String getName() {
+        return name;
     }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public IngredientType getType() {
+        return type;
+    }
+    public void setType(IngredientType type) {
+        this.type = type;
+    }
+
+    //    public Ingredient getIngredient() {
+//        return ingredient;
+//    }
+//
+//    public void setIngredient(Ingredient ingredient) {
+//        this.ingredient = ingredient;
+//    }
 
     public String getAmount() {
         return amount;
@@ -49,6 +77,10 @@ public class RInventory {
 
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
+    }
+
+    public int hashCode() {
+        return ingredientId;
     }
 
 }
