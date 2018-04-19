@@ -83,6 +83,15 @@ public class ReviewService {
         return reviewRepository.findByOwner(person);
     }
 
+    public List<Review> getReviewsForPerson(Integer personId){
+        List<Review> list = new ArrayList<>();
+        Person person = personRepository.findOne(personId);
+        for(Recipe r: recipeRepository.findByOwner(person)){
+            list.addAll(reviewRepository.findByRecipe(r));
+        }
+        return list;
+    }
+
     public void addReview(Integer recipeId, Integer ownerId, Review review) {
         Recipe recipe = recipeRepository.findOne(recipeId);
         Person owner = personRepository.findOne(ownerId);

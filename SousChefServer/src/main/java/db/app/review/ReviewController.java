@@ -42,13 +42,23 @@ public class ReviewController {
     }
 
     /**
-     * Returns all of the reviews for a certain person
+     * Returns all of the reviews that a certain person has posted
      * @param personId the ID of the person to get the reviews for
-     * @return a list of reviews for that person
+     * @return a list of reviews that person has poster
      */
     @RequestMapping("/person/{personId}")
     public List<Review> getPersonReviews(@PathVariable Integer personId){
         return reviewService.getPersonReviews(personId);
+    }
+
+    /**
+     * Returns all of the reviews posted on a Person's recipes
+     * @param personId ID of the person to find the reviews posted for them
+     * @return list of reviews posted on that person's recipes
+     */
+    @RequestMapping("/person/for/{personId}")
+    public List<Review> getReviewsForPerson(@PathVariable Integer personId){
+        return reviewService.getReviewsForPerson(personId);
     }
 
     /**
