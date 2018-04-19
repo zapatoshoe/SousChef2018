@@ -69,12 +69,13 @@ public class PersonService {
 	 * If the email is in use, does not insert the person and returns a person with uninitialized fields
 	 * @param person The person to add
 	 */
-	public void addPerson(Person person) {
+	public Person addPerson(Person person) {
         if (!personRepository.findByEmail(person.getEmail()).isEmpty())    //if the email is already in use, return
-			return;
+			return new Person();
 		Helpers.convertStringToBlob(person);
+		person.setAverageRating(0f);
 		person.setCreated(new Date());
-		personRepository.save(person);
+		return personRepository.save(person);
 	}
 
 	/**
