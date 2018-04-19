@@ -12,6 +12,10 @@ public class ReviewController {
     @Autowired
     ReviewService reviewService;
 
+    /**
+     * Get all the reviews in the data base
+     * @return list of all reviews in the data base
+     */
     @RequestMapping("/all")
     public List<Review> getAllReviews(){
         return reviewService.getAllReviews();

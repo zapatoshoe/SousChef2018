@@ -89,6 +89,11 @@ public class ReviewService {
         if (recipe == null || owner == null) {
             return;
         }
+        for(Review r: reviewRepository.findByOwner(owner)){
+            if(r.getRecipe().getId() == recipeId){
+                return;
+            }
+        }
         review.setRecipe(recipe);
         review.setOwner(owner);
         review.setDate(new Date());
