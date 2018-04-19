@@ -7,6 +7,7 @@ import db.app.recipe.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -58,6 +59,14 @@ public class ReviewService {
         }
         personRepository.save(person);
 
+    }
+
+    public List<Review> getAllReviews(){
+        List<Review> list = new ArrayList<>();
+        for(Review r: reviewRepository.findAll()){
+            list.add(r);
+        }
+        return list;
     }
 
     public Review getReview(Integer reviewId) {

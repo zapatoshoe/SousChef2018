@@ -12,6 +12,11 @@ public class ReviewController {
     @Autowired
     ReviewService reviewService;
 
+    @RequestMapping("/all")
+    public List<Review> getAllReviews(){
+        return reviewService.getAllReviews();
+    }
+
     /**
      * Returns the review given a specific reviewId
      * @param reviewId the review that is desired
