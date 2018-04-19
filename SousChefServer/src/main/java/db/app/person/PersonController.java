@@ -49,8 +49,8 @@ public class PersonController {
 	 * @param person The person to be added
 	 */
 	@RequestMapping(method=RequestMethod.POST, value="/add")
-	public void addPerson(@RequestBody Person person) {
-		personService.addPerson(person);
+	public Person addPerson(@RequestBody Person person) {
+		return personService.addPerson(person);
 	}
 	
 	/**
