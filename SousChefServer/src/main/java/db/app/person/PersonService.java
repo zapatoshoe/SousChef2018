@@ -70,10 +70,12 @@ public class PersonService {
 	 * @param person The person to add
 	 */
 	public Person addPerson(Person person) {
-        if (!personRepository.findByEmail(person.getEmail()).isEmpty())    //if the email is already in use, return
+        if (checkEmail(person).getId() != -1)    //if the email is already in use, return null person
 			return new Person();
 		Helpers.convertStringToBlob(person);
+		person.setType("Chef");
 		person.setAverageRating(0f);
+		person.setNumRecipes(0);
 		person.setCreated(new Date());
 		return personRepository.save(person);
 	}

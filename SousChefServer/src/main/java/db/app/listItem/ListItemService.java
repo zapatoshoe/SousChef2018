@@ -2,6 +2,8 @@ package db.app.listItem;
 
 import db.app.ingredient.Ingredient;
 import db.app.ingredient.IngredientService;
+import db.app.inventory.Inventory;
+import db.app.inventory.InventoryService;
 import db.app.person.Person;
 import db.app.person.PersonService;
 import db.app.recipe.RInventory;
@@ -24,6 +26,8 @@ public class ListItemService {
     private IngredientService ingredientService;
     @Autowired
     private RecipeService recipeService;
+    @Autowired
+    private InventoryService inventoryService;
 
     /**
      * Returns all items for a specific Person
@@ -61,13 +65,16 @@ public class ListItemService {
         if(recipe == null)
             return;
         List<RInventory> ingredients = recipe.getInv();
+        List<Inventory> inventory = inventoryService.getInventory(ownerId);
         int endOfIndex = shoppingList.isEmpty() ? 0 : shoppingList.get(shoppingList.size() - 1).getOrderNumber();    //get the largest order number to put the items at the end
         for(RInventory i : ingredients) {
             ListItem item = new ListItem();
             item.setChecked(false);
             Ingredient ingredient = ingredientService.getIngredient(i.getIngredientId());
+            Inventory inv = new Inventory();
+            inv.setIngredient(ingredient);
             item.setEntry(ingredient.getName());
-            if(!shoppingList.contains(item)) {
+            if(!shoppingList.contains(item) && !inventory.contains(inv)) { //TODO check inventory
                 item.setOrderNumber(++endOfIndex);
                 addToUserList(ownerId, item);
             }
