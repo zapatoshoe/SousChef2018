@@ -59,6 +59,12 @@ public class ListItemService {
         return listItemRepository.save(item);
     }
 
+    /**
+     * Adds the Ingredients for a Recipe to a User's shopping list if they are not in
+     * their inventory or already in the shopping List
+     * @param ownerId The person to add the items to
+     * @param recipeId The recipe with the ingredients to add
+     */
     public void addRecipeIngredientsToUserList(Integer ownerId, Integer recipeId) {
         List<ListItem> shoppingList = getUserList(ownerId); //sorted Shopping List
         Recipe recipe = recipeService.getRecipe(recipeId);
@@ -74,7 +80,7 @@ public class ListItemService {
             Inventory inv = new Inventory();
             inv.setIngredient(ingredient);
             item.setEntry(ingredient.getName());
-            if(!shoppingList.contains(item) && !inventory.contains(inv)) { //TODO check inventory
+            if(!shoppingList.contains(item) && !inventory.contains(inv)) {
                 item.setOrderNumber(++endOfIndex);
                 addToUserList(ownerId, item);
             }

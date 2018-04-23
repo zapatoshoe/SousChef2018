@@ -210,10 +210,20 @@ public class RecipeService {
         }
     }
 
+    /**
+     * Removes an RInventory from a recipe
+     * @param inventory The inventory to be removed
+     */
     public void removeIngredientFromRecipe(RInventory inventory) {
         rInventoryRepository.delete(inventory.getId());
     }
 
+    /**
+     * Generates a List of recommended Recipes based on common occurrences of types in their favorites
+     * Will not recommend recipes that are already favorited by them or made by them
+     * @param ownerId The owner to recommend items for
+     * @return The List of recommended Recipes
+     */
     public List<Recipe> recommendRecipes(Integer ownerId) {
         Search search = new Search();
         search.setStarRating(4.5f);
