@@ -1,0 +1,10 @@
+db.app
+db.app.ingredient
+db.app.inventory
+db.app.listItem
+db.app.person
+db.app.recipe
+db.app.recipeFavorite
+db.app.recipeSteps
+db.app.review
+db.app.util
